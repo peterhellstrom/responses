@@ -40,7 +40,7 @@ devtools::test()
 # Document data:
 # https://r-pkgs.org/data.html
 
-install_github("peterhellstrom/cyclar")
+install_github("peterhellstrom/responses")
 
 
 ## Load package ----
