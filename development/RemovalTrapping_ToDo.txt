@@ -1,0 +1,25 @@
+Rebecca A. Bartel, Frederick F. Knowlton, and L. Charles Stoddart. 2005. Mammal abundance indices in the northern portion of the Great Basin, 1962–1993. Ecology 86:3130. 
+
+
+Indices of rodent abundance. — Trends in the abundance of various rodents were assessed via a series of rodent survey routes. Each survey route utilized 23.2 km (14.4 mi) of tertiary dirt road and consisted of 25 trapping transects located at 0.97-km (0.6 mi) intervals along and perpendicular to the route, alternately on the left and right of the road. Each transect consisted of 10 trap stations, spaced 10 m apart at which we placed 1 M-4 snap trap with an expanded treadle (Carley and Knowlton 1971). Traps were baited with a mixture of peanut butter and rolled oats and checked daily for three consecutive trap-nights. The indices of rodent abundance are expressed as “catch per unit effort,” with effort defined with the equation of Hoffman (1979), Stoddart (1987a, b), and Mills (1987) and Mills and Knowlton (1991):
+
+
+
+effort <- (Nt / (N0 - 1)) / ln(Nt / N0)
+
+
+where:
+
+E = effort (number of trap nights);
+
+N0 = initial number of operable traps; and
+
+Nt = N0 minus the number of sprung traps (with or without rodents),
+
+which assumes the rate at which traps are sprung decreases in proportion to the number of traps still operable because once sprung, traps no longer contribute to the trapping effort.
+
+
+See the four abundance indices in:
+Theuerkauf et al 2011 ann zool fenn
+
+Some of these are already implemented
