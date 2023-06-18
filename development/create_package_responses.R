@@ -17,9 +17,6 @@ devtools::test()
 # Document data:
 # https://r-pkgs.org/data.html
 
-p <- "W:/PROJEKT/R/cyclar"
-#usethis::create_package(p, check_name = FALSE)
-
 usethis::use_mit_license()
 
 use_git_config(user.name = "peterhellstrom", user.email = "peter.hellstrom@nrm.se")
