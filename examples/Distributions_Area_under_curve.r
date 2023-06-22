@@ -1,4 +1,4 @@
-source("W:/PROJEKT/R/distributions/distRibutions.r")
+source("W:/projects/R/distributions/distRibutions.r")
 source("distRibutions.r")
 
 # Draw density function of a theoretical distribution and add an area under the curve:

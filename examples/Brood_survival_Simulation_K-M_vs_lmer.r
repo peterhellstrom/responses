@@ -1,6 +1,6 @@
-devtools::load_all("W:/PROJEKT/R/responses")
+library(responses)
 library(lme4)
-################################################################################
+
 # Code for simulating two "populations" and test for difference in survival
 # between nestlings stages and interaction stage*population.
 
@@ -103,15 +103,14 @@ glmer(surv ~ stage + (1|year), family=binomial, data=inp)
 
 coefs <- rep.bn.lmer@fixef
 
-rep.bn.lmer2 <- glmer(surv ~ stage + year + (1|brood), family=binomial, data=inp) 
+rep.bn.lmer2 <- glmer(surv ~ stage + year + (1|brood), family=binomial, data=inp)
 anova(rep.bn.lmer,rep.bn.lmer2) # Should really use REML=FALSE for fixed effects comparison!!!
 
 pval <- anova(rep.bn.lmer,rep.bn.lmer2)[2,7]
 ps[i] <- pval # send p-value to a vector, de-select this step if not running the for loop!
 
-############################################################################################
 
-# Calculate means of nestlings per breeding stage
+# Calculate means of nestlings per breeding stage ----
 means <- cbind(
 tapply(sim.dat$ClutchSize,sim.dat$Year,mean),
 tapply(sim.dat$Hatchlings,sim.dat$Year,mean),
@@ -123,12 +122,12 @@ tapply(sim.dat$Fledglings,sim.dat$Year,mean)
 #tapply(temp$Alive+temp$Dead,list(temp$Time,temp$Year),sum))
 
 # Output comparing simulated values, calculated from means, estimated with lmer and estimated with KM.
-out <- 
+out <-
 data.frame(
 simulated = c(p11,p12,p21,p22), # print simulated p's
 
 from.means = c(
-sapply(2:3, function(i) means[1,i]/means[1,i-1]), 
+sapply(2:3, function(i) means[1,i]/means[1,i-1]),
 sapply(2:3, function(i) means[2,i]/means[2,i-1])
 ), # Calculate survival p's from means
 
@@ -152,8 +151,7 @@ out.f2[i,] <- as.numeric(out[4,])
 
 }
 
-################################################################################
-# Analyze simulation output:
+# Analyze simulation output: ----
 
 # Point estimation
 h1.est <- apply(out.h1,2,function (x) quantile(x,c(0.025,0.5,0.975),na.rm=T))

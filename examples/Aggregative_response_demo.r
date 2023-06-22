@@ -1,6 +1,6 @@
 ################################################################################
 # Model isocline numerical response with the nr-function
-devtools::load_all("W:/PROJEKT/R/responses")
+library(responses)
 
 # Note that function doesn't work if:
 # x and y values contain zero OR if x and y values contain 1 (log ratios are undefined in step 2)

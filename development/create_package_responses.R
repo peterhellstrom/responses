@@ -3,7 +3,7 @@
 library(devtools)
 library(usethis)
 
-p <- "W:/PROJEKT/R/responses"
+p <- "W:/projects/R/responses"
 #usethis::create_package(p, check_name = FALSE)
 
 devtools::load_all()

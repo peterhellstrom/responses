@@ -1,5 +1,5 @@
 require(boot)
-source("W:/PROJEKT/R/nResponse/nResponse.r")
+source("W:/projects/R/nResponse/nResponse.r")
 
 # Data used by Flint et al:
 # Example 1

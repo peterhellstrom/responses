@@ -1,5 +1,5 @@
 ################################################################################
-source("W:/PROJEKT/-= R Development =-/distRibutions/distRibutions.r")
+source("W:/projects/-= R Development =-/distRibutions/distRibutions.r")
 ################################################################################
 # Additional functions
 

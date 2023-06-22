@@ -1,4 +1,4 @@
-devtools::load_all("W:/PROJEKT/R/responses")
+library(responses)
 
 # Parameters (Michaelis-Menten parameterization)
 a <- 50

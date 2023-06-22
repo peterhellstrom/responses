@@ -1,15 +1,23 @@
-devtools::load_all("W:/PROJEKT/R/responses")
+library(responses)
 
 # Simulate data:
 p0 <- list(a=500, b=10, theta=2, sigma=50, n=25, x.max=50)
-with(p0, {
-	x <- runif(n, min=0, max=x.max)
-	y <- abs((a * x^theta / (b^theta + x^theta))) + rnorm(n, 0, sigma)
-	xy <<- data.frame(x,y)
-})
 
-dev.new()
-with(xy, plot(x,y,bty="l",pch=16))
+simulate_response <- function(n = 25, x.min = 0, x.max = 50,
+                              a, b, theta, sigma) {
+  x <- runif(n, min = x.min, max = x.max)
+  y <- abs((a * x^theta / (b^theta + x^theta))) + rnorm(n, 0, sigma)
+  data.frame(x, y)
+}
+
+xy <- simulate_response(a = 500, b = 10, theta = 2, sigma = 50)
+with(xy, plot(x, y, bty = "l", pch = 16))
+
+ggplot(xy, aes(x, y)) +
+  geom_point(size = 2, shape = 16, col = "red")
+
+ggplot(simulate_response(a = 500, b = 10, theta = 2, sigma = 50), aes(x, y)) +
+  geom_point(size = 2, shape = 16, col = "red")
 
 preview (y~TypeIIIb(x,a,b,theta), xy, start=c(a=500,b=10,theta=2.5), variable = 1)
 preview (y~TypeIIIb(x,a,b,theta), xy, start=c(a=500,b=10,theta=2), variable = 1)

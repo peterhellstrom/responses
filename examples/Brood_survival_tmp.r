@@ -1,10 +1,8 @@
-source("C:/WORK/ANALYSER/-= R Development =-/distRibutions/distRibutions.r")
-devtools::load_all("W:/PROJEKT/R/responses")
+library(responses)
 library(lme4)
 library(boot)
 
-################################################################################
-# Randomization test
+# Randomization test ----
 n.broods <- 100
 N.bar <- 4
 #N0 <- rtrunc(n.broods, "pois", a = 2, b = 6, lambda=N.bar)
@@ -27,7 +25,8 @@ surv.prob.2rand(x=x12, vec=g, R=500)
 surv.prob.boot(x1)
 
 flint.km(x1)
-################################################################################
+
+
 # ToDO
 # Include heterogeneity in survival between broods
 # Simulate random effects for broods and intervals
@@ -67,8 +66,8 @@ test <- t(test)
 hist(apply(test,1,diff), col="steelblue")
 
 
-################################################################
-# MIXED MODEL with glmer
+
+# MIXED MODEL with glmer ----
 x <- ProjectSurvival(N0=N0, T=length(surv), st=surv)
 # x <- x[-which(apply(x,1,prod)==0),]
 
@@ -101,4 +100,4 @@ summary(m3.boot, high.moments=TRUE)
 confint(m3.boot, level=.95, type="perc")
 expit(confint(m3.boot, level=.95, type="perc"))
 hist(m3.boot, legend="separate")
-################################################################
+

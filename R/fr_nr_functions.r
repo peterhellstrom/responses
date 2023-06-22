@@ -1,5 +1,4 @@
-# Set up functions for the different response types:
-# (Generating functions)
+# Different functional and numerical response types
 
 # SINGLE PREY
 # Michaelis-Menten type
@@ -25,7 +24,6 @@ fr.mm <- function(x,a,b,theta) a*x^theta / (b^theta + x^theta)
 fr.iv <- function(x,a,b,d,theta) a*x^theta / (b+d*x + x^theta)
 fr.h <- function(x,a,h,theta) (a*x^theta) / (1 + a*h*x^theta)
 
-
 # "Standard" type II & type III models
 type2 <- deriv(~ (a*x) / (b + x), c("a","b"), function(x,a,b) {})
 type3 <- deriv(~ a*x^2 / (b^2 + x^2), c("a","b"), function(x,a,b) {})
@@ -38,16 +36,13 @@ type2tb <- deriv(~ (a*(x-d)) / (b + (x-d)), c("a","b","d"), function(x,a,b,d) {}
 type3ta <- deriv(~ (a*(x-d)^theta) / ((b-d)^theta + (x-d)^theta), c("a","b","d","theta"), function (x,a,b,d,theta) {} )
 type3tb <- deriv(~ (a*(x-d)^theta) / ((b)^theta + (x-d)^theta), c("a","b","d","theta"), function (x,a,b,d,theta) {} )
 
-type3tb <- function (x,a,b,d,theta) (a*(x-d)^theta) / ((b)^theta + (x-d)^theta)
-
 # Different parameterizations of the logistic function used by Henden et al.
 logist <- deriv(~ a/(1 + exp(-(b + d*x))), c("a","b","d"), function(x,a,b,d) {})
 logist2 <- deriv(~ a/(1 + exp((b + d*-x))), c("a","b","d"), function(x,a,b,d) {})
 logist3 <- deriv(~ a/(1 + exp((b - d*x))), c("a","b","d"), function(x,a,b,d) {})
 
-
 # Convert between Holling's and Michaelis-Menten parameterization
-convHollMM <- function (att,h) { 
+convHollMM <- function (att,h) {
 	# att*x / (1 + att*h*x)
 	a = 1/h
 	b <- 1/(att*h)
@@ -62,7 +57,6 @@ convMMHoll <- function(a,b,theta=1) {
 }
 
 
-# NOT YET IMPLEMENTED IN THE UPDATE fResponse.r
 # MULTI-PREY
 
 # Should be updated to:
@@ -83,21 +77,21 @@ TypeII.h.n <- function(x, a, h, output=c("list","matrix")) {
 	# a = vector with attack rates of length n
 	# h = vector with handling times of length n
 	# output = c("list", "matrix"): output in list or matrix format
-	
+
 	if (ncol(x) != length(a) | ncol(x) != length(h)) stop("Wrong dimensions")
-	
+
 	num <- sweep(x,2,a,'*')
 	denom <- 1 + (x %*% (a*h))
 	f <- sweep(num,1,denom,'/')
 	labs <- paste("f",1:ncol(x),sep="")
-	
+
 	if (output == "matrix") {
 		colnames(f) <- labs
 	} else if (output == "list") {
 		f <- split(f, rep(1:ncol(f), each = nrow(f)))
 		names(f) <- labs
 	}
-	
+
 	f
 }
 

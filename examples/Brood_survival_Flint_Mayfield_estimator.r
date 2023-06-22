@@ -34,7 +34,7 @@ dat2 <- structure(list(X1 = c(NA, NA, NA, 4, NA, 4, NA, NA, NA, NA),
 "X17", "X18", "X19", "X20", "X21", "X22", "X23", "X24", "X25", 
 "X26", "X27"), row.names = c(NA, -10L), class = "data.frame")
 
-devtools::load_all("W:/PROJEKT/R/responses")
+library(responses)
 
 mayfield(dat1, method="exposure-days")
 mayfield(dat1, method="bart-robson")

@@ -1,4 +1,4 @@
-source("W:/PROJEKT/R/distributions/distRibutions.r")
+source("W:/projects/R/distributions/distRibutions.r")
 source("DistributionsFunctions.r")
 
 # Test the custom functions ecdf2 and ecdfn. Compare with the base function ecdf.
