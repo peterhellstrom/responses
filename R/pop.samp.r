@@ -1,6 +1,15 @@
 # Custom functions for standard error & coefficient of variation
-se <- function(x) sd(x) / sqrt(length(x))
-cv <- function(x) sd(x) / mean(x)
+#' @export
+se <- function(x) {
+  sd(x) / sqrt(length(x))
+}
+
+#' @export
+cv <- function(x) {
+  sd(x) / mean(x)
+}
+
+#' @export
 ci.l <- function(x) {
 	mean(x) - qnorm(0.975)*se(x)
 }
@@ -9,13 +18,14 @@ ci.u <- function(x) {
 }
 
 # ToDO: Handling of NA's in tapply.formula?
+#' @export
 pop.samp <- function (fo, df, rownames=TRUE, ci=FALSE) {
-	
+
 	df <- droplevels(df)
 	z <- tapply.formula(fo, df, length)
 	dims <- dim(z)
 	out.names <- dimnames(z)
-	
+
 	if (ci == TRUE) {
 		funcs <- c("sum", "length", "mean", "median", "sd", "se", "cv", "min", "max", "ci.l", "ci.u")
 		out <- sapply(1:length(funcs), function (i) do.call(tapply.formula, list(fo=fo, df=df, func=get(funcs[i]))))

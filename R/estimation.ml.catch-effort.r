@@ -8,7 +8,7 @@
 # Code adapted from WiSP function point.est.ce
 # Note that interval estimation is not included in this function!!!
 # Input: vectors containing raw captures and effort per trapping occasion
-
+#' @export
 ml.ce <- function(captures, effort, iterlim=1000) {
 
 	rs <- c(0,captures)[-length(c(0,captures))]
@@ -56,7 +56,7 @@ ml.ce <- function(captures, effort, iterlim=1000) {
 	Nhat.ind <- round(Nhat.grp * Es)
 
 	# Output
-	pointest <- list(sample = captures, effort = effort, Nhat.grp = Nhat.grp, Nhat.ind = (Nhat.grp * Es), theta = theta, phat = pshat, Es = Es, log.Likelihood = log.Likelihood, 
+	pointest <- list(sample = captures, effort = effort, Nhat.grp = Nhat.grp, Nhat.ind = (Nhat.grp * Es), theta = theta, phat = pshat, Es = Es, log.Likelihood = log.Likelihood,
 	AIC = AIC, created = date())
 	class(pointest) <- "point.est.ce"
 	return(pointest)

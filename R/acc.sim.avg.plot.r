@@ -1,6 +1,7 @@
 # Plot of average values
 # (Estimated pop size against sample size)
 
+#' @export
 acc.sim.avg.plot <- function(genotypes, samples, object, model, type) {
 
 	pop.vec <- sapply(1:length(genotypes), function(i) max(genotypes[[i]]) )
@@ -13,10 +14,9 @@ acc.sim.avg.plot <- function(genotypes, samples, object, model, type) {
 	else stop ("Wrong model chosen!")
 
 	if (type=="qi") {
-		xlims <- max(object[[model]]$samples) 
+		xlims <- max(object[[model]]$samples)
 		ylims <- max(unlist(object[[model]]$qi))
 
-	dev.new(width=6,height=5)
 	par(mar=c(5,4,3,1))
 	plot(c(0,xlims),c(0,ylims),type="n",xlab="Sample size",ylab="Estimated population size",font.lab=2,las=1,main=model.lab)
 
@@ -37,13 +37,12 @@ acc.sim.avg.plot <- function(genotypes, samples, object, model, type) {
 	pop.vec <- colnames(object[[model]]$avg.est)
 	for (i in 1:length(genotypes)) {
 		abline(h=pop.vec[i],lty=2,col=c(0+i))
-	}} 
+	}}
 
 	if (type=="point") {
-		xlims <- max(object[[model]]$samples) 
+		xlims <- max(object[[model]]$samples)
 		ylims <- max(unlist(object[[model]]$avg.est))
 
-		dev.new(width=6,height=5)
 		par(mar=c(5,4,3,1))
 		plot(c(0,xlims),c(0,ylims),type="n",xlab="Sample size",ylab="Estimated population size",font.lab=2,las=1,main=model.lab)
 
@@ -60,5 +59,5 @@ acc.sim.avg.plot <- function(genotypes, samples, object, model, type) {
 		}}
 
 	# Add legend
-	legend("topright",legend=pop.vec, col=c(1:length(genotypes)),pch=16,cex=1.3 ) 
+	legend("topright",legend=pop.vec, col=c(1:length(genotypes)),pch=16,cex=1.3 )
 }

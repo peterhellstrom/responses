@@ -1,3 +1,4 @@
+#' @export
 lnorm2norm <- function(mu,sigma) {
 	names(mu) <- names(sigma) <- NULL
 	 m <- exp(mu + (sigma^2)/2)
@@ -6,6 +7,7 @@ lnorm2norm <- function(mu,sigma) {
 	 c(m=m, sd=sd, v=v)
 }
 
+#' @export
 norm2lnorm <- function(m,sd) {
 	names(m) <- names(sd) <- NULL
 	v <- sd^2

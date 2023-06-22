@@ -1,26 +1,26 @@
+#' @export
 plot.acc.curve <- function(obj, plot.type="normal", xlim=NULL, addPoints=TRUE) {
 
 	x <- obj$Samples
 	y <- obj$Genotypes
 	A <- obj$ParameterEstimates
-	
+
 	if (is.null(xlim)) {
 		# Make a plot showing a) the accumulation curve and b) the three different fitted models
 		# Extended plot type means
 		if (plot.type=="extended") { xlims <- c(0,A[1,1]*A[1,2]-A[1,2]); ylims <- c(0, A[1,1]) }
 		else if (plot.type=="normal") { xlims <- c(0,max(x)); ylims <- c(0,max(y)) }
-		else stop ("The plot type you specified is not valid!") 
+		else stop ("The plot type you specified is not valid!")
 		}
-	
+
 	if (!is.null(xlim)) {
 		# Make a plot showing a) the accumulation curve and b) the three different fitted models
 		# Extended plot type means
 		if (plot.type=="extended") { xlims <- xlim; ylims <- c(0, A[1,1]) }
 		else if (plot.type=="normal") { xlims <- xlim; ylims <- c(0,max(y)) }
-		else stop ("The plot type you specified is not valid!") 
+		else stop ("The plot type you specified is not valid!")
 		}
-		
-		dev.new(width=12,height=6)
+
 		par(mfrow=c(1,2))
 
 		plot(c(0,x), c(0,y), pch=16, bty="l", xlab="Sample number",
@@ -41,6 +41,6 @@ plot.acc.curve <- function(obj, plot.type="normal", xlim=NULL, addPoints=TRUE) {
 			abline(v=length(x), lty=2) # Draw vertical line at number of samples
 
 			legend("topleft",c("Kohn","Eggert","Chessel"), col=c("black","green","blue"), lwd=c(2,2,2), lty=c(1,2,3), bty="n", cex=0.8)
-		
+
 			par(mfrow=c(1,1))
 }

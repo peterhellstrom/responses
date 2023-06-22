@@ -1,4 +1,5 @@
-extr.try <- function(x, fn) { 
+#' @export
+extr.try <- function(x, fn) {
 
 	sets <- length(x)
 	# rows is the number of succesful simulations

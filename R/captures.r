@@ -2,6 +2,7 @@
 # Otis DL, Burnham KP, White GC, Anderson DR (1978) Statistical inference from capture data on closed populations. Wildl Monogr 62:1-135 (p. 44-)
 # White GC, Anderson DR, Burnham KP, Otis DL (1982) Capture-recapture and removal methods for sampling closed populations. Los Alamos National Laboratory, Los Alamos, New Mexico
 
+#' @export
 captures <- function(N, sessions, c.prob) {
 
 	E.n <- numeric(sessions)
@@ -9,7 +10,7 @@ captures <- function(N, sessions, c.prob) {
 	not.caught <- numeric(sessions)
 	pop.start <- numeric(sessions)
 	n.start <- N
-	
+
 	if (length(c.prob) == 1) c.prob <- rep(c.prob, sessions)
 	if (length(c.prob) != sessions) stop("c.prob must be a single probability, or a vector of the same length as the number of sessions")
 

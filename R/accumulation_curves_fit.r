@@ -1,10 +1,11 @@
 # Input x = samples and y = genotypes, nS = length(samples), IC = Information criteria (returns a table with AICc and Akaike weights if TRUE),
 # iniMethod = method for generation of start values
+#' @export
 acc.fit <- function(x, y, nS, IC=TRUE, iniMethod="nls") {
-	
+
 	# Use get.ini.mm() to get starting values
 	inits <- get.ini.mm(x=x, y=y, iniMethod=iniMethod)
-	
+
 	if (length(inits) != 2) message("Initial parameter estimation failed!", "\n")
 	a <- inits[1]; b <- inits[2]
 
@@ -17,7 +18,7 @@ acc.fit <- function(x, y, nS, IC=TRUE, iniMethod="nls") {
 	# Make a table that summarizes the parameter estimates for the three models
 	A <- rbind(coef(mKohn), coef(mEggert), c(coef(mChessel),NA))
 	rownames(A) <- c("mKohn","mEggert","mChessel")
-		
+
 	# Model selection
 	# Returns a table with model selection parameters (uses the function ICtab from package bbmle)
 	if (IC == TRUE) {
@@ -26,16 +27,17 @@ acc.fit <- function(x, y, nS, IC=TRUE, iniMethod="nls") {
 	if (IC == FALSE) {
 		ms.tab <- NULL
 	}
-		
+
 	list(A=A, ms.tab=ms.tab)
 	}
 
 # This function fits all three models and returns a table with the parameter estimates.
+#' @export
 acc.curve <- function(samples, genotypes, shuffle=TRUE, iniMethod="nls", Log=FALSE) {
-	
+
 	nS <- length(samples)
 	nUG <- length(unique(genotypes))
-	
+
 	x <- 1:nS
 	z <- rep(1:nUG, as.vector(table(genotypes)))
 	if (shuffle == TRUE) {
@@ -47,7 +49,7 @@ acc.curve <- function(samples, genotypes, shuffle=TRUE, iniMethod="nls", Log=FAL
 	if (Log==TRUE) y <- log(y)
 
 	fitm <- acc.fit(x, y, nS=nS, iniMethod=iniMethod)
-	
+
 		out <- list(
 			"SampleSize" = nS,
 			"NoUniqueGenotypes" = nUG,
@@ -55,7 +57,7 @@ acc.curve <- function(samples, genotypes, shuffle=TRUE, iniMethod="nls", Log=FAL
 			"msel" = fitm$ms.tab,
 			"Samples" = x,
 			"Genotypes" = y)
-			
+
 		# Print output
 		out
 }

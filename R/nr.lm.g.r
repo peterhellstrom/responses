@@ -1,7 +1,8 @@
+#' @export
 nr.lm.g <- function(x, y, g) {
 
 	if (length(levels(g)) > 2) stop("Current version only allows two levels in factor g")
-	
+
 	# Plot data
 	if (min(x) < 0) {xlims <- c(min(x),max(x))}
 	if (min(x) >= 0) {xlims <- c(0,max(x))}
@@ -16,7 +17,6 @@ nr.lm.g <- function(x, y, g) {
 	fm4 <- lm(y ~ g:x - 1) # No intercept, varying slopes
 	fm5 <- lm(y ~ x) # No effect of grouping variable, only of covariate
 
-	dev.new(width=13, height=6)
 	op <- par(list(mfrow=c(2,3), mar=c(5,4,3,1)))
 
 	plot(x, y, pch=gnum, main="fm1: Varying intercepts and slopes", xlim=xlims, ylim=ylims, font.lab=2, las=1)

@@ -1,10 +1,11 @@
 # Compare actual observed data with another (simulated) data set.
 # Draw histogram of simulated data, and add min, max, density of observed data.
+#' @export
 evalSim.plot <- function(x, x.sim) {
-	
+
 	x.eval.max <- 100 * (table(x.sim >= max(x)) / length(x.sim)) # % of simulated values larger than max(observed)
 	x.eval.min <- 100 * (table(x.sim <= min(x)) / length(x.sim)) # % of simulated values smaller than min(observed)
-	
+
 	hist(x.sim, breaks=30, col="steelblue", xlab="x", ylab="Density", main="Simulation vs. data", freq=FALSE)
 		lines(density(x.sim), lwd=2)
 		lines(density(x),col=3, lwd=2, lty=1)

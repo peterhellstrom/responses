@@ -1,3 +1,4 @@
+#' @export
 FreqTogen <- function(n, freq) {
 	nind <- sum(n)
 	inds <- 1:nind
@@ -6,6 +7,7 @@ FreqTogen <- function(n, freq) {
 	z
 }
 
+#' @export
 genToFreq <- function(z) {
 	x <- table(table(z))
 	m <- data.frame(m=1:max(names(x)))

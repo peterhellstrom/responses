@@ -40,7 +40,7 @@ curve3d(dbinorm(x, y, mu, sigma), from = c(-3, -3), to = c(3, 3), sys3d = "persp
 n <- 200
 d <- rmnorm(n, mu, sigma)
 # Draw ellipses (from package ellipse)
-dev.new()
+
 plot(d[,1], d[,2])
 lines(ellipse(sigma, centre = mu, level = 0.50), lty = 2)
 lines(ellipse(sigma, centre = mu, level = 0.90), col = 2, lty = 2, lwd = 2)

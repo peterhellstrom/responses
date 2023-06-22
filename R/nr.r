@@ -9,6 +9,7 @@
 # SOME CAVEATS:
 # For GAM analyses, the parameter k is set to -1 if n >= 10. Arbitrarily set to 4 if n < 10.
 
+#' @export
 nr <- function(x,y,plot=TRUE,method="direct") {
 
 	# Create vector to be used in plots
@@ -27,8 +28,6 @@ nr <- function(x,y,plot=TRUE,method="direct") {
 
 	if (plot==TRUE) {
 		# Plot simulated data (prey, predator, auto-correlations, cross-correlation)
-		dev.new(width=8, height=6)
-
 		op <- c(
 			par(mfrow=c(2,2)),
 			par(mar=c(5,4,3,1)))
@@ -48,8 +47,6 @@ nr <- function(x,y,plot=TRUE,method="direct") {
 
 		par(mfrow=c(1,1))
 		par(op)
-
-		dev.new(width=6,height=8)
 
 		op <- c(
 			par(mfrow=c(3,2)),
@@ -89,7 +86,6 @@ nr <- function(x,y,plot=TRUE,method="direct") {
 	modsel.dnr <- ICtab(test,delta=TRUE,weights=TRUE,sort=FALSE,type="AICc",nobs=nobs,mnames=names(test))
 
 	if (plot==TRUE) {
-		dev.new(width=10,height=6)
 		par(mfrow=c(2,4))
 
 		plot(x,y, font.lab=2, las=1, xlab="Prey density", ylab="Predator density", main="fm0")
@@ -177,7 +173,6 @@ nr <- function(x,y,plot=TRUE,method="direct") {
 		r2.inr <- as.numeric(t(sapply(1:length(out.inr), function(i) summary(out.inr[[i]])$r.squared)))
 
 		if (plot==TRUE) {
-			dev.new(width=22,height=12)
 			op <- par(mfrow=c(2,5))
 
 			plot(xt,ry, font.lab=2, las=1, xlab=expression(bold(paste("Prey density")[" t"])), ylab="Predator growth rate", main="fm1")
@@ -212,12 +207,11 @@ nr <- function(x,y,plot=TRUE,method="direct") {
 			par(op)
 
 			# Plot response with two response variables, 3d-planes
-			dev.new(width=22,height=12)
 			par(mfrow=c(1,3))
 
 			curve3d(
 				expr=coef(fm8)[1] + coef(fm8)[2]*x + coef(fm8)[3]*y,
-				from = c(min(xt),min(yt1)), to = c(max(xt),max(yt1)), n = c(25,25), 
+				from = c(min(xt),min(yt1)), to = c(max(xt),max(yt1)), n = c(25,25),
 				theta = -50, phi = 30,
 				xlab = "Prey density t", ylab = "Predator density t-1", zlab="Predator growth rate",
 				font.lab = 2, las = 1,
@@ -230,7 +224,7 @@ nr <- function(x,y,plot=TRUE,method="direct") {
 
 			curve3d(
 				expr=coef(fm10)[1] + coef(fm10)[2]*x + coef(fm10)[3]*y,
-				from = c(min(rx),min(resyt1)), to = c(max(rx),max(resyt1)), n = c(25,25), 
+				from = c(min(rx),min(resyt1)), to = c(max(rx),max(resyt1)), n = c(25,25),
 				theta = -50, phi = 30,
 				xlab = "Prey growth rate", ylab = "Residual predator density", zlab="Predator growth rate",
 				font.lab = 2, las = 1,
@@ -243,7 +237,7 @@ nr <- function(x,y,plot=TRUE,method="direct") {
 
 			curve3d(
 				expr=coef(fm11)[1] + coef(fm11)[2]*x + coef(fm11)[3]*y,
-				from = c(min(rx),min(logresyt1)), to = c(max(rx),max(logresyt1)), n = c(25,25), 
+				from = c(min(rx),min(logresyt1)), to = c(max(rx),max(logresyt1)), n = c(25,25),
 				theta = -50, phi = 30,
 				xlab = "Prey growth rate", ylab = "Log(Residual predator density)", zlab="Predator growth rate",
 				font.lab = 2, las = 1,

@@ -11,7 +11,6 @@ x <- runif(n=n, min=1, max=25)
 y.hat <- a*x^theta / (b^theta + x^theta)
 y <- rnorm(x, mean=y.hat, sd=sigma)
 
-dev.new()
 curve((a*x^theta / (b^theta + x^theta)), from=0,to=30,n=1001)
 points(x,y.hat,col=1)
 points(x,y,col=2,pch=16)
@@ -22,9 +21,7 @@ fm2 <- nls(y ~ a * x / (b + x), start=list(a=25,b=6))
 summary(fm2)
 coef(fm2)
 
-dev.new()
 plot(x,residuals(fm2))
-################################################################################
 
 # Call to WinBUGS
 # Load required libraries
@@ -92,7 +89,7 @@ model {
   # Priors
   a ~ dnorm(0, 0.0001)
   b ~ dnorm(0, 0.0001)
-  
+
   tau.y <- pow(sigma.y, -2)
   sigma.y ~ dunif(0,100)
 } # end of model

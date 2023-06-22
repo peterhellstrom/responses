@@ -1,7 +1,7 @@
 # Plot untruncated, left- & right truncated & right-truncated data:
 # Inputs mu and sigma must be a list with names: ut, lr, % r.
 # a is lower boundary, b upper boundary.
-
+#' @export
 plot.tr.lnorm <- function(mu, sigma, a, b) {
 
 	if (class(mu)!="list") stop("Input must be a list")
@@ -18,7 +18,6 @@ plot.tr.lnorm <- function(mu, sigma, a, b) {
 	yv.r <- dtrunc(xv, spec="lnorm", a=-Inf, b=b, meanlog=mu$r, sdlog=sigma$r)
 	ylims <- c(0, max(yv.nt,yv.rl,yv.r))
 
-	dev.new(width=12, height=6)
 	par(mfrow=c(1,2))
 	curve(dlnorm(x, meanlog=mu$ut, sdlog=sigma$ut), n=1001, col=1, add=F, from=0, to=b, ylim=ylims, ylab="Density", main="Log-normal distribution")
 	curve(dtrunc(x, "lnorm", a=a, b=b, meanlog=mu$lr, sdlog=sigma$lr), n=1001, col=2, lty=2, add=T)

@@ -3,11 +3,11 @@
 # data points from the different groups, and the first also plots fitted
 # with separate slopes, whereas for the second there is a common slope
 
-plot.ancova <- function(response, covariate, g, model=c("1","2","3"), cex=1.5, lwd=2, dev.new=TRUE) {
+#' @export
+plot.ancova <- function(response, covariate, g, model=c("1","2","3"), cex=1.5, lwd=2) {
 
 	model <- match.arg(model)
-	
-	if (dev.new) dev.new()
+
 	plot(covariate, response, cex=cex, lwd=lwd, col=as.numeric(g)+1)
 	grps <- unique(g)
 	ng <- length(grps)
@@ -23,9 +23,9 @@ plot.ancova <- function(response, covariate, g, model=c("1","2","3"), cex=1.5, l
 }
 
 # common slope plot
+#' @export
 plot.ancova.com <- function(response,covariate,g) {
 	g <- as.factor(g)
-	dev.new()
 	plot(covariate, response, cex=1.5, lwd=2, col=as.numeric(g)+1)
 	grps <- unique(g)
 	ng <- length(grps)

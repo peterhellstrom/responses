@@ -20,7 +20,6 @@ n[1],
 n[2]
 )
 
-dev.new()
 plot(x=c(0,30),y=c(0,max(unlist(y))),type="n",xlab="Prey density",ylab="Prey eaten",las=1,font.lab=2)
 for (i in 1:2) curve((a[i]*x / (b[i]+x)), from=0,to=30,n=1001, add=T)
 for (i in 1:2) points(x[[i]],y.hat[[i]])
@@ -105,12 +104,12 @@ gelman.diag(s1)
 
 model {
   # Likelihood
-  
+
   for (i in 1:n1) {
     y1[i] ~ dnorm(y.hat1[i], tau.y1)
     y.hat1[i] <- a1*x1[i] / (b1 + x1[i])
     }
-  
+
   for (i in 1:n2) {
     y2[i] ~ dnorm(y.hat2[i], tau.y2)
     y.hat2[i] <- a2*x2[i] / (b2 + x2[i])
@@ -119,13 +118,13 @@ model {
   # Priors
   a1 ~ dnorm(0, 0.0001)
   b1 ~ dnorm(0, 0.0001)
-  
+
   a2 ~ dnorm(0, 0.0001)
   b2 ~ dnorm(0, 0.0001)
-  
+
   tau.y1 <- pow(sigma.y1, -2)
   sigma.y1 ~ dunif(0,100)
-  
+
   tau.y2 <- pow(sigma.y2, -2)
   sigma.y2 ~ dunif(0,100)
 

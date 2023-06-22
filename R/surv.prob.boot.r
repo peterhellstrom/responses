@@ -1,9 +1,19 @@
 # Bootstrap
-q.fun <- function(x, na.rm=TRUE) quantile(x, c(0.025,0.5,0.975), na.rm=na.rm) # Function for extracting quantiles
-randomSample <- function(df, n=nrow(df), replace=TRUE) df[sample(nrow(df), n, replace=replace),]
 
+# Function for extracting quantiles
+#' @export
+q.fun <- function(x, na.rm=TRUE) {
+  quantile(x, c(0.025,0.5,0.975), na.rm=na.rm)
+  }
+
+#' @export
+randomSample <- function(df, n=nrow(df), replace=TRUE) {
+  df[sample(nrow(df), n, replace=replace),]
+}
+
+#' @export
 surv.prob.boot <- function(x, nboot=2000, na.rm=TRUE) {
-	
+
 	# Resample data, generate matrix with index variables (columns are replicates, rows are broods)
 	inds <- sapply(1:nboot, function(i) sample(1:nrow(x), replace=TRUE, size=nrow(x)))
 	# Point estimation for resampled data
@@ -12,7 +22,7 @@ surv.prob.boot <- function(x, nboot=2000, na.rm=TRUE) {
 	# Extract survival estimates (S.t) and survival function (S.f)
 	S.t <- t(sapply(est, "[[", "S.t"))
 	S.f <- t(sapply(est, "[[", "S.f"))
-	
+
 	# Calculate quantiles
 	if (dim(x)[2] > 2) {
 		out.boot <- list(
@@ -28,6 +38,7 @@ surv.prob.boot <- function(x, nboot=2000, na.rm=TRUE) {
 	out.boot
 }
 
+#' @export
 surv.prob.boot.n <- function(x, g, nboot=2000, na.rm=TRUE) {
 	x.g <- split(x, g)
 	lapply(x.g, surv.prob.boot, nboot=nboot, na.rm=na.rm)

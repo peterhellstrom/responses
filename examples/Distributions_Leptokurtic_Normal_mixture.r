@@ -16,7 +16,6 @@ descdist(x, boot=999)
 f.norm <- fitdist(x, "norm")
 f.norm$estimate
 
-dev.new()
 plot(f.norm, breaks=30, col="steelblue")
 
 # Fit leptokurtic distribution (T-family) with gamlss
@@ -26,12 +25,11 @@ coef.Gamlss(f.TF)
 fpars.TF <- coef.Gamlss(f.TF)$transformed
 
 plot(f.TF)
-dev.new(width=12, height=6); plot.Gamlss(f.TF) # Note heavy tails!
+plot.Gamlss(f.TF) # Note heavy tails!
 
 plot(density(x))
 curve(dTF(x, mu=fpars.TF[1], sigma=fpars.TF[2], nu=fpars.TF[3]), add=TRUE, n=1001, col=2)
 
-dev.new()
 plot(density(x), col=2, lwd=2, ylim=c(0,0.4), xlab="x", main="Mixture of normal distributions ==> Leptokurtosis")
 for (i in 1:length(mu)) curve(dnorm(x, mean=mu[i], sd=sigma[i]), lty=(i+1), add=T)
 curve(dnorm(x, mean=f.norm$estimate[1], sd=f.norm$estimate[2]), col=4, lty=2, lwd=2, add=T)

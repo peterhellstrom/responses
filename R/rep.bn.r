@@ -1,5 +1,6 @@
 # Convert to repeated measures input:
 # Input is a data frame or matrix where rows are broods and time are columns
+#' @export
 rep.bn <- function(x) {
 	if (length(colnames(x)) == 0) stop("Please supply column names for input matrix")
 	brood <- factor(1:nrow(x))

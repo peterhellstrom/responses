@@ -3,14 +3,14 @@
 
 # Must be updated to include start values in fr.fit!!!
 # This function DOES NOT WORK AT ALL yet due to changes in fr.fit
-
-fr.fit.n <- function(data,method,eq) { 
+#' @export
+fr.fit.n <- function(data,method,eq) {
 
 	nsim <- length(data)
 
 	# Repeat the curve-fitting "nsim" number of times set:
 	# Store the output in a list called res:
-	# Output: x,y, AICc and Akaike weights, stored in res - a huge list. 
+	# Output: x,y, AICc and Akaike weights, stored in res - a huge list.
 	res <- lapply(1:nsim, function(i) try(fr.fit(data[[i]],method,eq),silent=TRUE))
 
 	# Some generated data sets can not be fitted, so keep track of those:

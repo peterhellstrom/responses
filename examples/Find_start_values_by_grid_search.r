@@ -24,7 +24,7 @@ preview (y~TypeIIIb(x,a,b,theta), xy, start=c(a=500,b=10,theta=2), variable = 1)
 
 
 # Plot the resulting fit
-
+# Underlying functions have changed - code breaks!
 m1 <- with(xy, fr.start.grid(x,y,"TypeIIIb"))
 m1$start # Best estimate from grid search
 p1 <- m1$nlsSum$parameters[,1] # re-fitted estimates, the function uses the grid search to re-fit the model

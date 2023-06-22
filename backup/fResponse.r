@@ -77,7 +77,7 @@ aicc <- function(object, nobs=NULL) {
 aicc.n <- function(object, sort=TRUE, round=FALSE, nobs=NULL, digits=5) {
 	# Input is a list with objects (i.e. fitted models)
 	n <- length(object)
-	
+
 	if (!is.null(nobs)) {
 		tab <- data.frame(t(sapply(object,aicc,nobs)))
 		tab$n <- nobs
@@ -86,18 +86,18 @@ aicc.n <- function(object, sort=TRUE, round=FALSE, nobs=NULL, digits=5) {
 	}
 	rownames(tab) <- names(object)
 	index <- which(tab[,"AICc"] == min(tab[,"AICc"])) # Find model with smallest AICc
-	
+
 	deltai <- tab[,"AICc"] - min(tab[,"AICc"]) # AICc-delta values
 	rel.like <- exp(-deltai / 2) # Relative likelihood
 	wi <- rel.like / sum(rel.like) # Akaike weights
 	ER <- wi[index] / wi # Information ratio
 	ranking <- rank(deltai)
-	
+
 	# Create output (data frame)
 	out <- data.frame('logLik' = tab$logLik, 'K' = tab$k, 'n'=tab$n, 'AIC' = tab$AIC, 'AICc' = tab$AICc,
 		'delta' = deltai, 'weigths' = wi, 'ER' = ER, 'rank' = ranking)
 	rownames(out) <- names(object)
-	
+
 	if (sort) out <- out[order(out[,"rank"]),]
 	if (round) {
 		round(out,digits)
@@ -129,7 +129,7 @@ NP <- function(n, der, pp, mmp, T=1) {
 # Daily energy requirement
 # cast.rate = daily casting rate of pellets
 # corr.factor = single value or vector with correction factor (corrects for digested prey, usually based on feeding experiments in captivity)
-# mmp = mean mass in grams of prey tyep/species i 
+# mmp = mean mass in grams of prey tyep/species i
 # n = number of prey items of type/species i
 # N = total number of pellets analyzed
 # output = c("sum","ind"). If "sum" only the sum of all prey types is returned. If "ind", the contribution of each prey type i will be returned
@@ -194,7 +194,7 @@ der.pred <- function(m=1000, eff=0.769, cal=6.65) {
 
 
 ########################################################################
-extr.try <- function(x, fn) { 
+extr.try <- function(x, fn) {
 
 	sets <- length(x)
 	# rows is the number of succesful simulations
@@ -219,7 +219,7 @@ extr.try <- function(x, fn) {
 
 ########################################################################
 # Convert between Holling's and Michaelis-Menten parameterization
-convHollMM <- function (att,h) { 
+convHollMM <- function (att,h) {
 	# att*x / (1 + att*h*x)
 	a = 1/h
 	b <- 1/(att*h)
@@ -248,7 +248,7 @@ if (length(inds)>0) {
   y <- y[-inds]
   x1 <- x1[-inds]
   x2 <- x2[-inds]
-  } 
+  }
 
 y.hat <- multi.disc(x1=x1, x2=x2, a1=a1, a2=a2, h1=h1, h2=h2)$f1
   ssq <- sum((y.hat-y)^2)
@@ -258,9 +258,9 @@ y.hat <- multi.disc(x1=x1, x2=x2, a1=a1, a2=a2, h1=h1, h2=h2)$f1
 }
 
 #####################
- 
+
 LLmulti.disc2 <- function(y1, y2, x1, x2, a1, a2, h1, h2) {
-# I can't recall where this code came from! It is likely correct, but... 
+# I can't recall where this code came from! It is likely correct, but...
   # Observed response
   y <- matrix(cbind(y1,y2),ncol=2,byrow=F)
   # Predicted response
@@ -283,7 +283,7 @@ return(-sum(dmvnorm(x=y, mu=mu, Sigma=Sigma, log=TRUE)))
 }
 
 LLmulti.disc2m <- function(y1, y2, x1, x2, a1, a2, h1, h2, m1, m2) {
-# I can't recall where this code came from! It is likely correct, but... 
+# I can't recall where this code came from! It is likely correct, but...
   # Observed response
   y <- matrix(cbind(y1,y2),ncol=2,byrow=F)
   # Predicted response
@@ -403,7 +403,7 @@ LL.mm.p <- function(p, x, y, sigma) {
 	a <- p[1]
 	b <- p[2]
 	theta <- p[3]
-	
+
 	y.hat <- fr.mm(x, a, b, theta)
 	# sigma <- sqrt(sum((y.hat-y)^2)/length(x))
 	return(-sum(dnorm(y,y.hat,sigma,log=TRUE)))
@@ -421,7 +421,7 @@ LL.mm.2gr <- function(a1, a2, b1, b2, theta1, theta2, sigma) {
 	# ssq <- sum((y.hat-y)^2)
 	# n <- length(x)
 	# sigma <- sqrt(ssq/n)
-	return(-sum(dnorm(y,y.hat,sigma,log=TRUE))) 
+	return(-sum(dnorm(y,y.hat,sigma,log=TRUE)))
 }
 
 # Michaelis-Menten, type IVa & b
@@ -431,7 +431,7 @@ LL.mm4 <- function(y, x, a, b, d, theta, sigma) {
 	y.hat <- fr.iv(x, a, b, d, theta)
 	# sigma <- sqrt(sum((y.hat-y)^2)/length(x))
 	return(-sum(dnorm(y,y.hat,sigma,log=TRUE)))
-}	
+}
 
 # Holling's parameterization, type II, type IIIa & type IIIb
 # Nested models, fix parameter theta to 1 for Type II, 2 for Type IIIa
@@ -459,46 +459,46 @@ y2 <- data$y2
 nlc <- nls.control(maxiter = 50000, tol=0.000001, minFactor=0.000001)
 
   inds <- which(x1<=0 | x2<=0 | y1<=0 | y2<=0)
-  
+
   if (length(inds) > 0) {
-  
+
   y1.new <- y1[-inds]
   y2.new <- y2[-inds]
   x1.new <- x1[-inds]
-  x2.new <- x2[-inds]  
+  x2.new <- x2[-inds]
 
   mm.start.mle1 <- as.list(getInitial(y1.new ~ SSmicmen(x1.new, a, b),
               data=data.frame(x1.new,y1.new), control=nlc))
-  start.mle1 <- list(a1=as.numeric((mm.start.mle1$a/mm.start.mle1$b)), 
+  start.mle1 <- list(a1=as.numeric((mm.start.mle1$a/mm.start.mle1$b)),
               h1=as.numeric(1/mm.start.mle1$a))
-                            
+
   mm.start.mle2 <- as.list(getInitial(y2.new ~ SSmicmen(x2.new, a, b),
               data=data.frame(x2.new,y2.new), control=nlc))
-  start.mle2 <- list(a2=as.numeric((mm.start.mle2$a/mm.start.mle2$b)), 
+  start.mle2 <- list(a2=as.numeric((mm.start.mle2$a/mm.start.mle2$b)),
               h2=as.numeric(1/mm.start.mle2$a))
-              
+
   fm.multi <- mle2(minuslogl=LLmulti.disc2bd, start=
-              list(a1=start.mle1$a1, a2=start.mle2$a2, h1=start.mle1$h1, h2=start.mle2$h2), 
+              list(a1=start.mle1$a1, a2=start.mle2$a2, h1=start.mle1$h1, h2=start.mle2$h2),
               data=list(x1=x1,x2=x2,y1=y1,y2=y2), control=list(maxit=50000))
   }
-  
+
   if (length(inds) == 0) {
-  
+
   mm.start.mle1 <- as.list(getInitial(y1 ~ SSmicmen(x1, a, b),
               data=data.frame(x1,y1), control=nlc))
-  start.mle1 <- list(a1=as.numeric((mm.start.mle1$a/mm.start.mle1$b)), 
+  start.mle1 <- list(a1=as.numeric((mm.start.mle1$a/mm.start.mle1$b)),
               h1=as.numeric(1/mm.start.mle1$a))
-                            
+
   mm.start.mle2 <- as.list(getInitial(y2 ~ SSmicmen(x2, a, b),
               data=data.frame(x2,y2), control=nlc))
-  start.mle2 <- list(a2=as.numeric((mm.start.mle2$a/mm.start.mle2$b)), 
+  start.mle2 <- list(a2=as.numeric((mm.start.mle2$a/mm.start.mle2$b)),
               h2=as.numeric(1/mm.start.mle2$a))
-              
+
   fm.multi <- mle2(minuslogl=LLmulti.disc2bd, start=
-              list(a1=start.mle1$a1, a2=start.mle2$a2, h1=start.mle1$h1, h2=start.mle2$h2), 
+              list(a1=start.mle1$a1, a2=start.mle2$a2, h1=start.mle1$h1, h2=start.mle2$h2),
               data=list(x1=x1,x2=x2,y1=y1,y2=y2), control=list(maxit=5000))
   }
-  
+
 coefs <- rbind(
 coef(fm.multi)
 )
@@ -529,7 +529,7 @@ names(wi) <- c("MultiDisc")
 
 fit.objects <- list(fm.multi=fm.multi)
 
-out <- list(x1=x1, x2=x2, y=y1, start.mle1=start.mle1, start.mle2=start.mle2, 
+out <- list(x1=x1, x2=x2, y=y1, start.mle1=start.mle1, start.mle2=start.mle2,
 coefs=coefs, AICc=AICc.table, AkaikeWeights=wi, fit.objects=fit.objects)
 out
 
@@ -544,13 +544,13 @@ out
 # Must be updated to include start values in fr.fit!!!
 # This function DOES NOT WORK AT ALL yet due to changes in fr.fit
 
-fr.fit.n <- function(data,method,eq) { 
+fr.fit.n <- function(data,method,eq) {
 
 	nsim <- length(data)
 
 	# Repeat the curve-fitting "nsim" number of times set:
 	# Store the output in a list called res:
-	# Output: x,y, AICc and Akaike weights, stored in res - a huge list. 
+	# Output: x,y, AICc and Akaike weights, stored in res - a huge list.
 	res <- lapply(1:nsim, function(i) try(fr.fit(data[[i]],method,eq),silent=TRUE))
 
 	# Some generated data sets can not be fitted, so keep track of those:
@@ -580,7 +580,7 @@ fr.fit.n <- function(data,method,eq) {
 
 
 ########################################################################
-# After the simulation: 
+# After the simulation:
 # Alternative power-analysis, check the number of times each model was selected
 # as "best", using AICc as criterion:
 # data is an object fitted with fr.fit or fr.fit.n
@@ -609,36 +609,36 @@ fr.fit.out <- function (data){
 # Object = stored object, type = functional response type
 
 plot.fResponse <- function(object, type=c("Type0","TypeI","TypeII","TypeIIIa","TypeIIIb","all"),
-	main=NULL, xlab=NULL, ylab=NULL, lcols=c(1,1,2,3,4), ltys=c(3,1,2,3,4), lwd=2, dev.new=FALSE, ...) {
-	
+	main=NULL, xlab=NULL, ylab=NULL, lcols=c(1,1,2,3,4), ltys=c(3,1,2,3,4), lwd=2,  ...) {
+
 	if (length(lcols) < 5) lcols <- rep(lcols[1],5)
 	if (length(ltys) < 5) ltys <- rep(ltys[1],5)
 	coefs <- object$coefs
-	
+
 	if (missing(type)) {
 		type <- "all"
 	} else {
 		type <- match.arg(type)
 	}
-	
+
 	if (missing(main)) {
 		strMain <- "Functional response"
 	} else {
 		strMain <- main
 	}
-	
+
 	if (missing(xlab)) {
 		strxlab <- "Prey density"
 	} else {
 		strxlab <- xlab
 	}
-	
+
 	if (missing(ylab)) {
 		strylab <- "Consumption rate"
 	} else {
 		strylab <- ylab
 	}
-	
+
 	plot(object$x, object$y,
 		bty="l", font.lab=2,
 		xlab=strxlab, ylab=strylab, main=strMain,...)
@@ -716,7 +716,7 @@ plot.fResponse <- function(object, type=c("Type0","TypeI","TypeII","TypeIIIa","T
 # sigma must now be included in the estimation procedure, start values are required also for sigma
 # see corresponding updates in fr.fit.selfStart.r
 
-fr.fit <- function(x, y, method=c("nls","mle"), eq=c("M-M","Holling"), nls.start, 
+fr.fit <- function(x, y, method=c("nls","mle"), eq=c("M-M","Holling"), nls.start,
 	iter=5000, tol=0.000001, minFactor=0.000001) {
 
 xy <- data.frame(x=x,y=y)
@@ -728,7 +728,7 @@ nlc <- nls.control(maxiter = iter, tol=tol, minFactor=minFactor)
 
 if (eq == "M-M") str.colnames <- c("a","b","theta","sigma")
 else if (eq == "Holling") str.colnames <- c("a","h","theta","sigma")
-	
+
 	if (method=="nls") {
 		if (eq=="M-M") {
 			fm.0 <- lm(y~1)
@@ -743,14 +743,14 @@ else if (eq == "Holling") str.colnames <- c("a","h","theta","sigma")
 			fm.IIIa <- nls(y ~ TypeIIIa.h(x,a,h), start=nls.start[["ini.IIIa"]][1:2], data=xy, control=nlc)
 			fm.IIIb <- nls(y ~ TypeIIIb.h(x,a,h,theta), start=nls.start[["ini.IIIb"]][1:3], data=xy, control=nlc)
 		}
-		
+
 		fit.objects <- list(fm.0=fm.0, fm.I=fm.I, fm.II=fm.II, fm.IIIa=fm.IIIa, fm.IIIb=fm.IIIb)
 		p.est <- sapply(fit.objects, coef)
 		names(p.est[[1]]) <- "a"
 		names(p.est[[2]]) <- "a"
 		coefs <- with(p.est, rbind.fill.matrix(t(fm.0), t(fm.I), t(fm.II),t(fm.IIIa), t(fm.IIIb)))
 		coefs[3:4,3] <- 1:2
-		
+
 	} else if (method=="mle") {
 		if (eq=="M-M") {
 			# Obtain mle's
@@ -760,13 +760,13 @@ else if (eq == "Holling") str.colnames <- c("a","h","theta","sigma")
 			fm.IIIa <- mle2(minuslogl=LL.mm, start=as.list(nls.start[["ini.IIIa"]]), fixed=list(theta=2), data=as.list(xy), control=list(maxit=iter))
 			fm.IIIb <- mle2(minuslogl=LL.mm, start=as.list(nls.start[["ini.IIIb"]]), data=as.list(xy), control=list(maxit=iter))
 		} else if (eq=="Holling") {
-			fm.0 <- mle2(minuslogl=LL.null, start=as.list(nls.start[["ini.0"]]), data=as.list(xy), control=list(maxit=iter)) 
+			fm.0 <- mle2(minuslogl=LL.null, start=as.list(nls.start[["ini.0"]]), data=as.list(xy), control=list(maxit=iter))
 			fm.I <- mle2(minuslogl=LL.l, start=as.list(nls.start[["ini.I"]]), data=as.list(xy), control=list(maxit=iter))
-			fm.II <- mle2(minuslogl=LL.h, start=as.list(nls.start[["ini.II"]]), fixed=list(theta=1), data=as.list(xy), control=list(maxit=iter)) 
+			fm.II <- mle2(minuslogl=LL.h, start=as.list(nls.start[["ini.II"]]), fixed=list(theta=1), data=as.list(xy), control=list(maxit=iter))
 			fm.IIIa <- mle2(minuslogl=LL.h, start=as.list(nls.start[["ini.IIIa"]]), fixed=list(theta=2), data=as.list(xy), control=list(maxit=iter))
 			fm.IIIb <- mle2(minuslogl=LL.h, start=as.list(nls.start[["ini.IIIb"]]), data=as.list(xy), control=list(maxit=iter))
 		}
-		
+
 		fit.objects <- list(fm.0=fm.0, fm.I=fm.I, fm.II=fm.II, fm.IIIa=fm.IIIa, fm.IIIb=fm.IIIb)
 		p.est <- sapply(fit.objects, coef)
 		coefs <- with(p.est, rbind.fill.matrix(t(fm.0), t(fm.I), t(fm.II),t(fm.IIIa), t(fm.IIIb)))
@@ -775,7 +775,7 @@ else if (eq == "Holling") str.colnames <- c("a","h","theta","sigma")
 
 	# Output
 	rownames(coefs) <- c("0","I","II","IIIa","IIIb")
-	
+
 	out <- list(method=method, eq=eq, x=x, y=y, coefs=coefs, models=fit.objects)
 	class(out) <- "fResponse"
 	return(out)
@@ -791,8 +791,8 @@ else if (eq == "Holling") str.colnames <- c("a","h","theta","sigma")
 SStypeII <- deriv(~ (a*x) / (b + x), c("a","b"), function(x,a,b) {})
 attr(SStypeII,"pnames") <- c("a","b","sigma")
 attr(SStypeII,"class") <- "selfStart"
-attr(SStypeII,"initial") <- 
-function (mCall, data, LHS) 
+attr(SStypeII,"initial") <-
+function (mCall, data, LHS)
 {
 	# data = data frame with x and y data
 	# LHS = left hand side = response variable = y
@@ -819,8 +819,8 @@ function (mCall, data, LHS)
 SStypeII.nls <- deriv(~ (a*x) / (b + x), c("a","b"), function(x,a,b) {})
 attr(SStypeII.nls,"pnames") <- c("a","b","sigma")
 attr(SStypeII.nls,"class") <- "selfStart"
-attr(SStypeII.nls,"initial") <- 
-function (mCall, data, LHS) 
+attr(SStypeII.nls,"initial") <-
+function (mCall, data, LHS)
 {
 	# data = data frame with x and y data
 	# LHS = left hand side = response variable = y
@@ -846,8 +846,8 @@ function (mCall, data, LHS)
 SStypeIIIa <- deriv(~ (a*x^2) / (b^2 + x^2), c("a","b"), function(x,a,b) {})
 attr(SStypeIIIa,"pnames") <- c("a","b","sigma")
 attr(SStypeIIIa,"class") <- "selfStart"
-attr(SStypeIIIa,"initial") <- 
-function (mCall, data, LHS) 
+attr(SStypeIIIa,"initial") <-
+function (mCall, data, LHS)
 {
 	# data = data frame with x and y data
 	# LHS = left hand side = response variable = y
@@ -873,8 +873,8 @@ function (mCall, data, LHS)
 SStypeIIIa.nls <- deriv(~ (a*x^2) / (b^2 + x^2), c("a","b"), function(x,a,b) {})
 attr(SStypeIIIa.nls,"pnames") <- c("a","b")
 attr(SStypeIIIa.nls,"class") <- "selfStart"
-attr(SStypeIIIa.nls,"initial") <- 
-function (mCall, data, LHS) 
+attr(SStypeIIIa.nls,"initial") <-
+function (mCall, data, LHS)
 {
 	# data = data frame with x and y data
 	# LHS = left hand side = response variable = y
@@ -899,8 +899,8 @@ function (mCall, data, LHS)
 SStypeIIIb <- deriv(~ (a*x^theta) / (b^theta + x^theta), c("a","b","theta"), function(x,a,b,theta) {})
 attr(SStypeIIIb,"pnames") <- c("a","b","theta","sigma")
 attr(SStypeIIIb,"class") <- "selfStart"
-attr(SStypeIIIb,"initial") <- 
-function (mCall, data, LHS) 
+attr(SStypeIIIb,"initial") <-
+function (mCall, data, LHS)
 {
 	# data = data frame with x and y data
 	# LHS = left hand side = response variable = y
@@ -930,8 +930,8 @@ function (mCall, data, LHS)
 SStypeIIIb.nls <- deriv(~ (a*x^theta) / (b^theta + x^theta), c("a","b","theta"), function(x,a,b,theta) {})
 attr(SStypeIIIb.nls,"pnames") <- c("a","b","theta")
 attr(SStypeIIIb.nls,"class") <- "selfStart"
-attr(SStypeIIIb.nls,"initial") <- 
-function (mCall, data, LHS) 
+attr(SStypeIIIb.nls,"initial") <-
+function (mCall, data, LHS)
 {
 	# data = data frame with x and y data
 	# LHS = left hand side = response variable = y
@@ -962,7 +962,7 @@ function (mCall, data, LHS)
 	#z <- xy[["y"]]
 	#if (min(z) <= 0) z <- abs(z)
 	#xy[["z"]] <- log(z/(a.hat - z))
-	
+
 	#m0 <- lm(z ~ log(x), data=xy)
 	#theta.hat <- as.numeric(coef(m0)[2]) # slope
 	#b.hat <- as.numeric(exp(-coef(m0)[1] / theta.hat))
@@ -973,7 +973,7 @@ function (mCall, data, LHS)
 # Must also include estimate of sigma for mle2-functions
 # getInitial(y ~ SStypeIIIb(x,a,b,theta), data=xy.list) part is wrong, this does not work...
 getStart.mm <- function(x, y, method=c("mle","nls")) {
-	
+
 	method = match.arg(method)
 	xy.list <- list(x=x,y=y)
 
@@ -981,7 +981,7 @@ getStart.mm <- function(x, y, method=c("mle","nls")) {
 		ini.0 <- c('a'=mean(y), 'sigma'=sd(y))
 		m.I.start <- lm(y~x-1)
 		ini.I <- c('a'=as.vector(coef(m.I.start)), 'sigma'=as.numeric(sqrt(deviance(m.I.start)/df.residual(m.I.start))))
-	
+
 		out <- list(
 			'eq' = 'M-M',
 			'x' = x,
@@ -996,7 +996,7 @@ getStart.mm <- function(x, y, method=c("mle","nls")) {
 		ini.0 <- c('a'=mean(y))
 		m.I.start <- lm(y~x-1)
 		ini.I <- c('a'=as.vector(coef(m.I.start)))
-	
+
 		out <- list(
 			'eq' = 'M-M',
 			'x' = x,
@@ -1007,27 +1007,27 @@ getStart.mm <- function(x, y, method=c("mle","nls")) {
 			'ini.IIIa' = getInitial(y ~ SStypeIIIa.nls(x,a,b), data=xy.list),
 			'ini.IIIb' = getInitial(y ~ SStypeIIIb.nls(x,a,b,theta), data=xy.list)
 		)
-	
+
 	}
-	
+
 	class(out) <- "getStart"
 	out
 }
 
 getStart.mm2 <- function(x, y, method=c("mle","nls"), theta=2) {
 	# Use the estimates from type IIIa for type IIIb as well!
-	
+
 	method <- match.arg(method)
 	xy.list <- list(x=x,y=y)
 
 	if (method == "mle") {
-	
+
 		ini.0 <- c('a'=mean(y), 'sigma'=sd(y))
 		m.I.start <- lm(y~x-1)
 		ini.I <- c('a'=as.vector(coef(m.I.start)), 'sigma'=as.numeric(sqrt(deviance(m.I.start)/df.residual(m.I.start))))
 		ini.IIIb <- c(getInitial(y ~ SStypeIIIa(x,a,b), data=xy.list), 'theta'=theta)
 		ini.IIIb <- ini.IIIb[c(1,2,4,3)]
-	
+
 		out <- list(
 			'eq' = 'M-M',
 			'x' = x,
@@ -1044,7 +1044,7 @@ getStart.mm2 <- function(x, y, method=c("mle","nls"), theta=2) {
 		ini.I <- c('a'=as.vector(coef(m.I.start)))
 		ini.IIIb <- c(getInitial(y ~ SStypeIIIa.nls(x,a,b), data=xy.list), 'theta'=theta)
 		ini.IIIb <- ini.IIIb[c(1,2,4,3)]
-	
+
 		out <- list(
 			'eq' = 'M-M',
 			'x' = x,
@@ -1055,9 +1055,9 @@ getStart.mm2 <- function(x, y, method=c("mle","nls"), theta=2) {
 			'ini.IIIa' = getInitial(y ~ SStypeIIIa.nls(x,a,b), data=xy.list),
 			'ini.IIIb' = ini.IIIb
 		)
-	
+
 	}
-	
+
 	class(out) <- "getStart"
 	out
 }
@@ -1068,7 +1068,7 @@ getStart.mm2 <- function(x, y, method=c("mle","nls"), theta=2) {
 getStart.h <- function(x, y, method=c("mle","nls"), theta=2) {
 	method <- match.arg(method)
 	xy.list = list(x,y)
-	
+
 	if (method == "mle") {
 		mm <- getStart.mm2(x, y, theta, method="mle")
 		ini.II = with(as.list(mm$ini.II), c('a'=a/b, 'h'=1/a, 'sigma'=sigma))
@@ -1081,7 +1081,7 @@ getStart.h <- function(x, y, method=c("mle","nls"), theta=2) {
 		ini.IIIa <- with(as.list(mm$ini.IIIa), c('a'=a/b^2, 'h'=1/a))
 		ini.IIIb <- with(as.list(mm$ini.IIIb), c('a'=2 * (a/b^theta), 'h'=1/a, 'theta'=theta))
 		out <- list('eq'='Holling', 'x' = x,'y' = y, 'ini.0' = mm$ini.0, 'ini.I' = mm$ini.I, 'ini.II'=ini.II, 'ini.IIIa'=ini.IIIa, 'ini.IIIb'=ini.IIIb)
-	
+
 	}
 	class(out) <- "getStart"
 	out
@@ -1091,16 +1091,16 @@ getStart.method <- function(x, y, plot=TRUE) {
 
 	m1 <- lm(x/y ~ x)
 	m2 <- lm(1/y ~ I(1/x))
-	
+
 	bolker <- c('att'=as.numeric((coef(m1)[1])^-1), 'h'=as.numeric(coef(m1)[2]))
 	bolker.mm <- convHollMM(att=as.numeric(bolker["att"]), h=as.numeric(bolker["h"]))
-	
+
 	out <- list(
 		'bolker' = bolker,
 		'bolker.mm' = bolker.mm,
 		'lineweaver-burk' = c('a' = as.numeric(1/abs(coef(m2)[1])), 'b'= as.numeric(abs(coef(m2)[2]/coef(m2)[1])))
 	)
-	
+
 	if (plot) {
 		par(mfrow=c(2,2))
 			plot(x,x/y)
@@ -1111,19 +1111,19 @@ getStart.method <- function(x, y, plot=TRUE) {
 				abline(m2,col=2)
 			par(mfrow=c(1,1))
 	}
-	
+
 	out
 }
 
 
 # Function that plots initial estimates for a given (single) dataset
 plot.getStart <- function(object, ...) {
-	
+
 	eq <- object$eq
 	x <- object$x
 	y <- object$y
 	plot(x,y,...)
-	
+
 	if (eq=="M-M") {
 		with(as.list(object$ini.II), curve(TypeII(x, a=a, b=b), add=TRUE, col=2,lty=2))
 		with(as.list(object$ini.IIIa), curve(TypeIIIa(x, a=a, b=b), add=TRUE, col=3, lty=3))
@@ -1187,21 +1187,21 @@ TypeII.h.n <- function(x, a, h, output=c("list","matrix")) {
 	# a = vector with attack rates of length n
 	# h = vector with handling times of length n
 	# output = c("list", "matrix"): output in list or matrix format
-	
+
 	if (ncol(x) != length(a) | ncol(x) != length(h)) stop("Wrong dimensions")
-	
+
 	num <- sweep(x,2,a,'*')
 	denom <- 1 + (x %*% (a*h))
 	f <- sweep(num,1,denom,'/')
 	labs <- paste("f",1:ncol(x),sep="")
-	
+
 	if (output == "matrix") {
 		colnames(f) <- labs
 	} else if (output == "list") {
 		f <- split(f, rep(1:ncol(f), each = nrow(f)))
 		names(f) <- labs
 	}
-	
+
 	f
 }
 
@@ -1259,13 +1259,13 @@ fr.loocv <- function(x, y, names=NULL, starts, type=c("TypeII","TypeIIIa","TypeI
 		if (type=="TypeII") {
 			fit <- nls(y.train ~ TypeII(x.train,a,b), start=list(a=starts[1],b=starts[2]))
 			coefs <- c(coef(fit),NA)
-		} else if (type=="TypeIIIa") { 
+		} else if (type=="TypeIIIa") {
 			fit <- nls(y.train ~ TypeIIIa(x.train,a,b), start=list(a=starts[1],b=starts[2]))
 			coefs <- c(coef(fit),NA)
-		} else if (type=="TypeIIIb") { 
+		} else if (type=="TypeIIIb") {
 			fit <- nls(y.train ~ TypeIIIb(x.train,a,b,theta), start=list(a=starts[1],b=starts[2],theta=starts[3]))
 			coefs <- coef(fit)
-		}    
+		}
 
 		# Calculate output
 		# 1) Residual sum of squares when data point i is removed
@@ -1280,7 +1280,7 @@ fr.loocv <- function(x, y, names=NULL, starts, type=c("TypeII","TypeIIIa","TypeI
 		y.pred.full <- fitted(total.fit)[i]
 		err[i,2] <- x.obs
 		err[i,3] <- y.obs
-		err[i,4] <- y.pred 
+		err[i,4] <- y.pred
 		err[i,5] <- (y.obs - y.pred)^2
 		err[i,6] <- y.pred.full
 		err[i,7:9] <- coefs
@@ -1293,33 +1293,31 @@ fr.loocv <- function(x, y, names=NULL, starts, type=c("TypeII","TypeIIIa","TypeI
 		mean.prediction.error = mean(err[,2]), sd.deviance = sd(err[,1]),
 		sd.prediction.error = sd(err[,2]), total = parms.total
 	)
-	
+
 	if (is.null(names)) names <- 1:length(y)
-	
+
 	if (plot) {
-		dev.new(width=8,height=5)
 		par(mfrow=c(1,2))
-		
-		plot(x, y, 
-			xlim=c(0, max(x)), ylim=c(0,max(c(y,err[,4]))), 
+
+		plot(x, y,
+			xlim=c(0, max(x)), ylim=c(0,max(c(y,err[,4]))),
 			font.lab=2, las=1, pch=16, font.lab=2, las=1, main="Predictions")
 		points(err[,"x.obs"], err[,"y.pred"], pch=16,col=2)
 		legend("bottomright", c("Observed", "Jack. predictions"), col=c(1,2), pch=c(16, 16), bty="n", cex=0.8)
-	
+
 		plot(err[,plot.parameters[1]], err[,plot.parameters[2]], pch=16, font.lab=2,
 			xlab=plot.parameters[1], ylab=plot.parameters[2], main="Jack-knife influence plot")
 		text(err[,"a"], err[,"b"], labels = names, pos=1, offset=0.5, cex=0.7)
 		points(parms.total[1], parms.total[2], pch=16, cex=1.6, col=2)
-	
+
 		par(mfrow=c(1,1))
 	}
-	
+
 	out
 }
 
 
 
-########################################################################
 fr.sim.data.multi <- function(parms,lims,sigma,n,sets,cor.method,...) {
 
 # Simulate two-prey systems, mainly for testing estimation functions
@@ -1331,45 +1329,45 @@ fr.sim.data.multi <- function(parms,lims,sigma,n,sets,cor.method,...) {
 # 3) Calculate the stochastic value (observation error) based on y.hat ("mean"), by drawing from
 # a normal distribution with sd=sigma argument.
 # cova = covariance matrix???
- 
+
 out <- vector("list",sets)
 
 for (i in 1:sets) {
-  
+
   if (cor.method=="null") {
-  
+
   x1 <- runif(n=n, min=lims$min.x1, max=lims$max.x1)
   x2 <- runif(n=n, min=lims$min.x2, max=lims$max.x2)
-   
+
   }
-  
+
   if (cor.method=="correlated") {
-  
+
   cova <- cova
 
   x <- mvrnorm(n, mu = c(cor.parms$x1,cor.parms$x2), Sigma = cova)
 
   inds <- which(x[1:n,]<0)
   x[inds] <- NA
-  
+
   x1 <- x[,1]
   x2 <- x[,2]
   }
-  
+
   y.hats <- multi.disc(x1=x1,x2=x2,a1=parms$a1,a2=parms$a2,h1=parms$h1,h2=parms$h2)
-   
+
   y1.hat <- y.hats$f1
   y1 <- abs(rnorm(x1,mean=y1.hat,sd=sigma))
   # inds1 <- which(y1<0)
   # y1[inds1] <- NA
-    
+
   y2.hat <- y.hats$f2
   y2 <- abs(rnorm(n,mean=y2.hat,sd=sigma))
   # inds2 <- which(y2<0)
   # y2[inds2] <- NA
-  
+
   out[[i]] <- list(
-  input = data.frame(a1=parms$a1, a2=parms$a2, h1=parms$h1, h2=parms$h2, min.x1=lims$min.x1, max.x1=lims$max.x1, 
+  input = data.frame(a1=parms$a1, a2=parms$a2, h1=parms$h1, h2=parms$h2, min.x1=lims$min.x1, max.x1=lims$max.x1,
           min.x2=lims$min.x2, max.x2=lims$max.x2, sigma=sigma, n=n, sets=sets),
   x1=x1,
   y1.hat=y1.hat,
@@ -1377,7 +1375,7 @@ for (i in 1:sets) {
   x2=x2,
   y2.hat=y2.hat,
   y2=y2)
-  
+
   }
 out
 }
@@ -1389,7 +1387,7 @@ out
 # Generate prey density (x), calculate deterministic y, and error normally distributed
 # error to y.det. Parameterization is Michaelis-Menten.
 
-# Inputs: 
+# Inputs:
 # parms = functional response parameters a,b,c (must be a list)
 # Functional response parameters:
 # a = asymptote (miximum kill rate)
@@ -1409,10 +1407,10 @@ out <- vector("list",sets)
 
 for (i in 1:sets) {
 
-if (xmethod=="full.x.range") {   
-  x <- runif(n=n, min=lims$min.x, max=lims$max.x) 
+if (xmethod=="full.x.range") {
+  x <- runif(n=n, min=lims$min.x, max=lims$max.x)
   }
-  
+
 if (xmethod=="even.x.range") {
 
   groups <- quantile(c(lims$min.x, lims$max.x))
@@ -1426,20 +1424,20 @@ if (xmethod=="even.x.range") {
         runif(n.samp[4],min=groups[4],max=groups[5])
         )
   }
-  
+
   y.hat <- parms$a*x^parms$c / (parms$b^parms$c + x^parms$c)
   # Draw random normal variates and take absolute value
   # Not the best solution, should find a better solution
   # based on Poission or negbin
   y <- abs(rnorm(x,mean=y.hat,sd=sigma))
-  
+
   out[[i]] <- list(
-  input=data.frame(a=parms$a, b=parms$b, c=parms$c, min.x=lims$min.x, max.x=lims$max.x,       
+  input=data.frame(a=parms$a, b=parms$b, c=parms$c, min.x=lims$min.x, max.x=lims$max.x,
         sigma=sigma, n=n, sets=sets),
   x=x,
   y.hat=y.hat,
   y=y)
-  
+
   }
 out
 }
@@ -1460,7 +1458,7 @@ fr.start.grid <- function(x, y, type=c("TypeII","TypeIIIa","TypeIIIb"), length.o
 	# a (asymptote): search in interval mean(y) to max(y) + extra
 	# b (half-saturation constant): 0 to mean(x)
 	# theta: 0.5 to 5
-	
+
 	if (type == "TypeII") {
 		grid <- expand.grid(a = seq(mean(y), max(y) + extra, length.out=length.out), b = seq(0, mean(x), length.out=length.out))
 		ss <- function(p) sum((y - TypeII(x, p[1], p[2]))^2)
@@ -1481,13 +1479,13 @@ fr.start.grid <- function(x, y, type=c("TypeII","TypeIIIa","TypeIIIb"), length.o
 		fm <- nls(y ~ TypeIIIb(x, a, b, theta), start = startval)
 	} else stop("Model not included!")
 
-	dat <- list('start'=startval, 'nls'=fm, 'nlsSum'=summary(fm)) 
+	dat <- list('start'=startval, 'nls'=fm, 'nlsSum'=summary(fm))
 }
 
 
 
 ########################################################################
-list2ascii <- function(x,file=paste(deparse(substitute(x)),".txt",sep="")) { 
+list2ascii <- function(x,file=paste(deparse(substitute(x)),".txt",sep="")) {
 
    tmp.wid = getOption("width")  # save current width
    options(width=10000)          # increase output width
@@ -1508,9 +1506,9 @@ tapply.formula <- function(fo, df, func=mean, output=c("matrix", "data.frame"), 
 	# fo = formula
 	# df = data.frame
 	# func = function
-	
+
 	output <- match.arg(output)
-	
+
     mf <- model.frame(fo, df)
     i <- attr(attr(mf, 'terms'), 'response')
     y <- mf[[i]]
@@ -1518,13 +1516,13 @@ tapply.formula <- function(fo, df, func=mean, output=c("matrix", "data.frame"), 
     by <- mf[-i]
 
     # return(as.data.frame.table(tapply(y, by, func, na.rm=TRUE), responseName=y.name))
-	
+
 	if (output == "data.frame") {
 		out <- as.data.frame.table(tapply(y, by, func), responseName=y.name)
 	} else if (output == "matrix") {
 		out <- tapply(y, by, func)
 	}
-	
+
 	if (rpl.NA != FALSE) out[is.na(out)] <- 0
 	out
 }
@@ -1577,7 +1575,7 @@ ICtab.df <- function(x) {
 ########################################################################
 # Function that obtains likelihood-profiles and confidence intervals for nls- or mle2-objects
 pci <- function(object, plot=FALSE, output=c("simple","full")) {
-	
+
 	if (class(object) == "lm") stop("object class lm is not implemented")
 	else if (class(object) == "glm") stop("object class glm is not supported")
 
@@ -1585,7 +1583,7 @@ pci <- function(object, plot=FALSE, output=c("simple","full")) {
 	p <- object
 	if (plot) plot(profile(object))
 	output <- match.arg(output)
-	
+
 	if (output == "simple") {
 		if (class(object)=="mle2") {
 			out <- data.frame(
@@ -1619,7 +1617,7 @@ pci <- function(object, plot=FALSE, output=c("simple","full")) {
 			)
 		}
 	}
-	
+
 	out
 }
 
@@ -1631,8 +1629,8 @@ pci <- function(object, plot=FALSE, output=c("simple","full")) {
 # Fit polynomial regression of order 0-3 to the data.
 
 # General function
-pred.rate <- function(x, y, plot=TRUE, dev.new=TRUE) {
-	
+pred.rate <- function(x, y, plot=TRUE) {
+
 	x <- x
 	p <- y/x
 
@@ -1640,7 +1638,7 @@ pred.rate <- function(x, y, plot=TRUE, dev.new=TRUE) {
 	#fit1 <- lm(p ~ x)
 	#fit2 <- lm(p ~ x + I(x^2))
 	#fit3 <- lm(p ~ x + I(x^2) + I(x^3))
-	
+
 	fit1 <- lm(p ~ poly(x, degree=1, raw=TRUE))
 	fit2 <- lm(p ~ poly(x, degree=2, raw=TRUE))
 	fit3 <- lm(p ~ poly(x, degree=3, raw=TRUE))
@@ -1653,17 +1651,15 @@ pred.rate <- function(x, y, plot=TRUE, dev.new=TRUE) {
 	))
 
 	print(anova(fit0,fit1,fit2,fit3))
-	
+
 	if (plot) {
 		xp <- seq(0,max(x),0.1)
 		yp1 <- predict(fit1, data.frame(x=xp))
-		
+
 		yp2 <- predict(fit2, data.frame(x=xp))
-		
+
 		yp3 <- predict(fit3, data.frame(x=xp))
-		
-		
-		if (dev.new) dev.new()
+
 		plot(x,p,ylab="Relative predation rate",pch=16,font.lab=2,las=1,
 			main="Polynomial regression: predation rate",
 			ylim=range(as.vector(c(yp1,yp2,yp3))))
@@ -1686,10 +1682,10 @@ pred.rate <- function(x, y, plot=TRUE, dev.new=TRUE) {
 # b = how preference changes with N1/N2, (b = 2, linear change)
 
 switching <- function(c, b, type=c("proportions","ratios"), round=3, x.max=NULL, ...) {
-	
+
 	b.text = round(b,round)
 	c.text = round(c,round)
-	
+
 	type <- match.arg(type)
 	if (type == "proportions") {
 		# Basic plot

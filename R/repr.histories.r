@@ -1,3 +1,4 @@
+#' @export
 repr.histories <- function(x) {
 	# Input x is a n-dimensional array created by table()
 	x <- as.data.frame(x)

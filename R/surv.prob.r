@@ -21,28 +21,29 @@
 # - Consider a death as a "removal" - will survival probabilities follow a hypergeometric or multinomial distribution?
 # - beta-binomial distribution for survival probability?, see Bolker's book!
 
+#' @export
 surv.prob <- function(x) {
 
 	# x is a matrix with broods as rows and time as columns
 	# z = number of time steps, S = survival (proportion), w = weights, numbers at risk
 	# censored, non.censored
-	# S.t = weighted mean of the estimates for individual broods, S.f = Kaplan-Meier survival function estimates of the proportion surviving from day 0, 
-	# SE.it, SE.t, 
+	# S.t = weighted mean of the estimates for individual broods, S.f = Kaplan-Meier survival function estimates of the proportion surviving from day 0,
+	# SE.it, SE.t,
 	# n.bar = Mean brood size at time t, M = number of broods (or marked females with broods)
 
 	z <- ncol(x) # Number of time steps = z-1
 	counts <- nrow(x) # Number of rows/broods
-	
+
 	names.list <- list('Brood' = rownames(x), 'Time' = paste(colnames(x)[1:z-1], colnames(x)[2:z], sep="-"))
-	
-	# Calculate survival 
+
+	# Calculate survival
 	S <- sapply(1:(z-1), function(i) x[,i+1] / x[,i]); dimnames(S) <- names.list
 	# Numbers at risk, used as weights.
 	w <- cbind(x[,1:(z-1)]); dimnames(w) <- names.list
-	
+
 	# Logical, look for undefined survival estimates in each brood
 	for (i in 2:z) undefined <- length(which(is.nan(S)))
-		
+
 		if (undefined > 0) {
 			# Remove undefined values, using the any(), is.nan(), and drop functions
 			x <- as.matrix(x[apply(S*w, 1, function(x)!any(is.nan(x))),, drop=F])
@@ -52,7 +53,7 @@ surv.prob <- function(x) {
 
 		# CHANGE HERE!
 		# If a brood only has a single observation (NA), survival can't be calculated and that brood should be removed:
-		# nas <- apply(S, 1, function(x) length(which(is.na(x) & !is.nan(x)))) 
+		# nas <- apply(S, 1, function(x) length(which(is.na(x) & !is.nan(x))))
 		nas <- apply(S, 1, function(x) length(which(is.na(x)))) # Count number of NA's on each row
 		nas.inds <- which(nas == ncol(S))
 
@@ -87,7 +88,7 @@ surv.prob <- function(x) {
 				SE.denom <- M * n.bar[-z]^2 * (M-1)
 				SE.t <- sqrt(colSums(SE.it, na.rm=T) / SE.denom[1:(z-1)])
 				non.censored <- valid.counts - length(censored)
-			} else if (z > 2) { 		
+			} else if (z > 2) {
 				w <- (S*w)/S
 				S.t <- colSums(S*w, na.rm=T) / colSums(w, na.rm=T)
 				S.f <- cumprod(S.t)
@@ -111,19 +112,21 @@ surv.prob <- function(x) {
 			S.t = S.t, S.f = S.f, SE.it = SE.it, SE.t = SE.t, CI = rbind(CIL = cil.S.t, CIU = ciu.S.t),
 			n.bar = n.bar, broods = counts, valid.broods = valid.counts,
 			M = M, non.censored = non.censored, undefined = undefined)
-		
+
 		class(out) <- "flint"
 		out
 }
 
 # x is a data frame with number of individuals in each brood
 # g is a grouping variable (factor)
+#' @export
 surv.prob.n <- function(x, g) {
 	x.split <- split(x, g)
 	lapply(x.split, surv.prob)
 }
 
 # Calculate test statistic D^2 for difference between two samples [survival functions]
+#' @export
 d2.obs <- function(x, g) {
 	if (length(levels(g)) > 2) stop("Only two groups can be compared!")
 	surv.0 <- surv.prob.n(x=x, g=g)

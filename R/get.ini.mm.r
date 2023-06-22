@@ -6,14 +6,15 @@
 # However, computation time is almost twice as long for nls and rlm compared with lm.
 # It is also possible to use manually entered starting values in vector format.
 
+#' @export
 get.ini.mm <- function(x, y=NULL, iniMethod=c("nls","grouped","rlm","lm")) {
-	
+
 	if (is.numeric(iniMethod) == TRUE) out <- iniMethod # If input is vector with values
-	
+
 	if (is.numeric(iniMethod) == FALSE) {
-		
+
 		iniMethod <- match.arg(iniMethod)
-		
+
 		if (iniMethod == "grouped") {
 			# grouped can only be used if the function resampl.data() has been used to create an object
 			# with resampled data sets

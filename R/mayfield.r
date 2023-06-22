@@ -1,7 +1,7 @@
 # Mayfield - estimator
 # Flint et al 1995
-#######################################################################
 
+#' @export
 mayfield <- function(dat, method) {
 
 	n.broods <- dim(dat)[1]
@@ -84,7 +84,7 @@ mayfield <- function(dat, method) {
 					p.hat <- p.hat + f.pm/f.prim.pm
 					p.iter[j] <- p.hat
 				} # end of inner loop
-	
+
 				dsr[i] <- p.iter[n.iter]
 				# Problem here: exposure is not defined if dsr == 1, and prints as zero.
 				exposure[i] <- delta.bs[i] / (1 - dsr[i])

@@ -32,27 +32,28 @@
 # 4) Uncorrected density index
 # Standard approach in many studies
 
+#' @export
 DI <- function(targets, nontargets=0, traps, duration, cpt=duration, rowNames=NULL){
-	
+
 		a1 <- nontargets
 		a2 <- targets
 		effort <- traps*duration
 		correction <- duration*(a1 + a2)/(2*cpt)
 		corrected.effort <- effort - correction
 		a0 <- effort - a1 - a2
-	
+
 		index <- data.frame(
 					fitzgerald = -100*(a2/(a1+a2))*log(a0/effort),
 					caughley = -100*log(1-(a2/effort)),
 					nelson = 100*a2/corrected.effort,
 					uncorrected = 100*a2/effort
 				)
-	
+
 		# Fitzgerald
 		se.index <- data.frame(
 						fitzgerald = 100*sqrt(((a1*a2*(log(a0/effort)^2))/(effort-a0)^3)+(a2^2/(a0*effort*(effort-a0))))
 					)
-		
+
 		input <- data.frame(
 					targets = targets,
 					nontargets = nontargets,
@@ -67,12 +68,12 @@ DI <- function(targets, nontargets=0, traps, duration, cpt=duration, rowNames=NU
 			if (length(rowNames) != nrow(index)) stop("Rownames does not match")
 			rownames(input) <- rownames(index) <- rownames(se.index) <- rownames
 		}
-		
+
 		out <- list(
 			input = input,
 			index = index,
 			se.index = se.index
 			)
-		
+
 		out
 	}

@@ -4,25 +4,26 @@
 # LLmulti.disc only estimates response to one prey species
 # LLmulti.disc2 estimates parameters to both species and is the preferred approach.
 
+#' @export
 LLmulti.disc <- function(y, x1, x2, a1, a2, h1, h2) {
-inds <- which(y<0) # do not allow negative values
-if (length(inds)>0) {
-  y <- y[-inds]
-  x1 <- x1[-inds]
-  x2 <- x2[-inds]
-  } 
+  inds <- which(y<0) # do not allow negative values
+  if (length(inds)>0) {
+    y <- y[-inds]
+    x1 <- x1[-inds]
+    x2 <- x2[-inds]
+  }
 
-y.hat <- multi.disc(x1=x1, x2=x2, a1=a1, a2=a2, h1=h1, h2=h2)$f1
+  y.hat <- multi.disc(x1=x1, x2=x2, a1=a1, a2=a2, h1=h1, h2=h2)$f1
   ssq <- sum((y.hat-y)^2)
   n <- length(y)
   sigma <- sqrt(ssq/n)
   return(-sum(dnorm(y,y.hat,sigma,log=TRUE)))
 }
 
-#####################
- 
+
+#' @export
 LLmulti.disc2 <- function(y1, y2, x1, x2, a1, a2, h1, h2) {
-# I can't recall where this code came from! It is likely correct, but... 
+  # I can't recall where this code came from! It is likely correct, but...
   # Observed response
   y <- matrix(cbind(y1,y2),ncol=2,byrow=F)
   # Predicted response
@@ -41,11 +42,12 @@ LLmulti.disc2 <- function(y1, y2, x1, x2, a1, a2, h1, h2) {
   loglik = -(n * (log(2 * pi)) + logdetS + ssq)/2
   sum(loglik)
 
-return(-sum(dmvnorm(x=y, mu=mu, Sigma=Sigma, log=TRUE)))
+  return(-sum(dmvnorm(x=y, mu=mu, Sigma=Sigma, log=TRUE)))
 }
 
+#' @export
 LLmulti.disc2m <- function(y1, y2, x1, x2, a1, a2, h1, h2, m1, m2) {
-# I can't recall where this code came from! It is likely correct, but... 
+  # I can't recall where this code came from! It is likely correct, but...
   # Observed response
   y <- matrix(cbind(y1,y2),ncol=2,byrow=F)
   # Predicted response
@@ -64,9 +66,10 @@ LLmulti.disc2m <- function(y1, y2, x1, x2, a1, a2, h1, h2, m1, m2) {
   loglik = -(n * (log(2 * pi)) + logdetS + ssq)/2
   sum(loglik)
 
-return(-sum(dmvnorm(x=y, mu=mu, Sigma=Sigma, log=TRUE)))
+  return(-sum(dmvnorm(x=y, mu=mu, Sigma=Sigma, log=TRUE)))
 }
 
+#' @export
 LLmulti.disc2bd <- function(y1, y2, x1, x2, a1, a2, h1, h2) {
   # Observed responses
   y <- matrix(c(y1,y2),ncol=2)
@@ -80,20 +83,21 @@ LLmulti.disc2bd <- function(y1, y2, x1, x2, a1, a2, h1, h2) {
   return(prod(svd(y - mu, nu=0, nv=0)$d)^2)
 }
 
+#' @export
 LLmulti.joly <- function(y, x1, x2, a.tot, h1, h2, alpha) {
 
-y.hat <- multi.joly(x1=x1, x2=x2, a.tot=a.tot, h1=h1, h2=h2, alpha=alpha)
-# Remove NA's
-inds <- which(is.na(y.hat))
+  y.hat <- multi.joly(x1=x1, x2=x2, a.tot=a.tot, h1=h1, h2=h2, alpha=alpha)
+  # Remove NA's
+  inds <- which(is.na(y.hat))
 
-if (length(inds)>0) {
-y <- y[-inds]
-x1 <- x1[-inds]
-x2 <- x2[-inds]
-y.hat <- y.hat[-inds] }
+  if (length(inds)>0) {
+    y <- y[-inds]
+    x1 <- x1[-inds]
+    x2 <- x2[-inds]
+    y.hat <- y.hat[-inds] }
 
-ssq <- sum((y.hat-y)^2)
-n <- length(y.hat)
-sigma <- sqrt(ssq/n)
-return(-sum(dnorm(y,y.hat,sigma,log=TRUE)))
+  ssq <- sum((y.hat-y)^2)
+  n <- length(y.hat)
+  sigma <- sqrt(ssq/n)
+  return(-sum(dnorm(y,y.hat,sigma,log=TRUE)))
 }

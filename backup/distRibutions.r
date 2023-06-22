@@ -34,11 +34,11 @@ auc.poly <- function(distr,para,from,to,by=0.01) {
 	if(class(para) != "list") stop("'para' must be a named list")
 	if (is.null(names(para))) stop("'para' must be a named list")
 	if ((missing(distr) & !missing(para)) || (missing(distr) & !missing(para))) stop("'distr' and 'para' must defined")
-	
+
 	# & Check that the specified function exists.
 	ddistname <- paste("d",distr,sep="")
 	if (!exists(ddistname, mode = "function")) stop(paste("The ", ddistname, " function must be defined"))
-	
+
 	# Check that the input parameters in the list 'para' matches the internal arguments of the function specified.
 	# If not, stop and return error message.
 	densfun <- get(ddistname, mode = "function")
@@ -47,16 +47,16 @@ auc.poly <- function(distr,para,from,to,by=0.01) {
 	args <- names(f)
 	m <- match(nm, args)
 	if (any(is.na(m))) stop(paste("'para' specifies names which are not arguments to ", ddistname))
-	
+
 	para.poly <- para
 	x.poly <- seq(from,to,by)
 	para.poly$x <- x.poly
 	y.poly <- do.call(ddistname, para.poly)
 	cord.x <- c(from, x.poly, to)
 	cord.y <- c(0, y.poly, 0)
-	
+
 	cbind(x=cord.x, y=cord.y)
-	
+
 }
 
 
@@ -72,17 +72,17 @@ auc.poly <- function(distr,para,from,to,by=0.01) {
 # auc("norm", para=list(mean=0, sd=1), from=qnorm(0.975, mean=0, sd=1), to=6, by=1/1000)
 
 auc <- function(distr, para, xlim=c(-3,3), from, to, by=0.01, col="skyblue") {
-	
+
 	# Evaluate input arguments
 	if(class(para) != "list") stop("'para' must be a named list")
 	if (is.null(names(para))) stop("'para' must be a named list")
 	if ((missing(distr) & !missing(para)) || (missing(distr) & !missing(para))) stop("'distr' and 'para' must defined")
 	if (is.null(xlim)) stop("no valid x values, change the 'xlim' argument")
-	
+
 	# & Check that the specified function exists.
 	ddistname <- paste("d",distr,sep="")
 	if (!exists(ddistname, mode = "function")) stop(paste("The ", ddistname, " function must be defined"))
-	
+
 	# Check that the input parameters in the list 'para' matches the internal arguments of the function specified.
 	# If not, stop and return error message.
 	densfun <- get(ddistname, mode = "function")
@@ -91,7 +91,7 @@ auc <- function(distr, para, xlim=c(-3,3), from, to, by=0.01, col="skyblue") {
 	args <- names(f)
 	m <- match(nm, args)
 	if (any(is.na(m))) stop(paste("'para' specifies names which are not arguments to ", ddistname))
-	
+
 	# Create plot
 	para.poly <- para
 	x.poly <- seq(from,to,by)
@@ -106,7 +106,7 @@ auc <- function(distr, para, xlim=c(-3,3), from, to, by=0.01, col="skyblue") {
 	plot(x,y,type="n",ylab="Density",las=1,main=distr)
 	polygon(cord.x, cord.y, col=col, lty=2)
 	lines(x,y,lty=1,col=1)
-	
+
 }
 
 
@@ -117,27 +117,27 @@ auc <- function(distr, para, xlim=c(-3,3), from, to, by=0.01, col="skyblue") {
 coef.Gamlss <- function(object) {
 	family <- object$family[1]
 	pars.names <- object$parameters
-	
+
 	pars <- get.coef(object, "coef")
 	pars.link <- get.coef(object, "link")
 	npar <- length(pars.names); pars.tr <- numeric(npar)
-	
+
 	# Links: identity, log, logit. Not implemented yet: probit, cloglog
 	invlogit <- function(x) exp(x)/(1 + exp(x))
 	logit <- function(x) log(x / (1-x))
-	
+
 	if ( any(na.omit(pars.link) %in% c("identity","log","logit") == FALSE)) stop("Only 'identity', 'log' and 'logit' link functions are implemented yet")
-	
+
 	for (i in 1:npar) {
 		pars.tr[i] <- switch(pars.link[i],
 			'identity' = pars[i],
 			'log' = log(pars[i]),
 			'logit' = logit(pars[i]),
 			'NA' = pars[i]) }
-	
+
 	names(pars) <- names(pars.tr) <- names(pars.link) <- pars.names
 	data.frame(estimate=pars.tr, transformed=pars, link=pars.link)
-	
+
 }
 
 
@@ -157,7 +157,7 @@ ecdf2 <- function(x, plot=TRUE) {
 	sortx <- sort(x)
 	ecdfx <- (1:length(x)) / length(x)
 	if (plot == TRUE) {
-		
+
 			plot(sortx, ecdfx, type="n", xlab="x", ylab="Fn(x)")
 			abline(h=c(0,1), lty=2, col="grey")
 			lines(sortx, ecdfx)
@@ -178,8 +178,8 @@ ecdfn <- function(x) {
 if (class(x) == "matrix") {
 	sortx <- sapply(1:ncol(x), function(i) sort(x[,i]))
 	ecdfx <- sapply(1:ncol(x), function(i) (1:length(x[,i])) / length(x[,i]))
-	
-	
+
+
 	plot(sortx, ecdfx, type="n", xlab="x", ylab="Fn(x)")
 	abline(h=c(0,1), lty=2, col="grey")
 	if (!is.null(colnames(x))) legend("bottomright", colnames(x), pch=16, cex=1, col=1:length(x), bty="n")
@@ -190,8 +190,8 @@ if (class(x) == "matrix") {
 if (class(x) == "list") {
 	sortx <- lapply(1:length(x), function(i) sort(x[[i]]))
 	ecdfx <- lapply(1:length(x), function(i) (1:length(x[[i]])) / length(x[[i]]))
-	
-	
+
+
 	plot(unlist(sortx), unlist(ecdfx), type="n", xlab="x", ylab="Fn(x)")
 	abline(h=c(0,1), lty=2, col="grey")
 	if (!is.null(names(x))) legend("bottomright", names(x), pch=16, cex=1, col=1:length(x), bty="n")
@@ -209,10 +209,10 @@ if (class(x) == "list") {
 # Compare actual observed data with another (simulated) data set.
 # Draw histogram of simulated data, and add min, max, density of observed data.
 evalSim.plot <- function(x, x.sim) {
-	
+
 	x.eval.max <- 100 * (table(x.sim >= max(x)) / length(x.sim)) # % of simulated values larger than max(observed)
 	x.eval.min <- 100 * (table(x.sim <= min(x)) / length(x.sim)) # % of simulated values smaller than min(observed)
-	
+
 	hist(x.sim, breaks=30, col="steelblue", xlab="x", ylab="Density", main="Simulation vs. data", freq=FALSE)
 		lines(density(x.sim), lwd=2)
 		lines(density(x),col=3, lwd=2, lty=1)
@@ -239,7 +239,7 @@ extrDistr <- function(x, order=FALSE) {
 	L <- exp(-delta/2) # likelihoods of models
 	w <-  L / sum(L) # Akaike weights
 	.x <- data.frame(.x,delta,w)
-	
+
 	if (order==TRUE) {
 		inds <- order(delta)
 		.x <- .x[inds,]
@@ -256,21 +256,21 @@ extrDistr <- function(x, order=FALSE) {
 # It's intended use is ONLY from within extrDistr.
 
 extrDistrAIC <- function(x) {
-	
+
 	if (class(x)!="list") stop("Input must be a list")
-	
+
 	sapply(1:length(x), function(i) {
-	
+
 		n <- length(x[[i]]$data)
 		k <- length(x[[i]]$estimate)
 
 		loglik <- x[[i]]$loglik
-	
+
 		aic <- 2*k - 2*loglik
 		# aic <- x[[i]]$aic
 		aic.c <- -2*loglik + 2*k*(k+1)/(n-k-1)
 		bic <- -2*loglik + k*log(n)
-	
+
 		.x <- c(n,k,loglik,aic,aic.c,bic)
 	})
 }
@@ -295,18 +295,18 @@ extrDistrAIC <- function(x) {
 # A lot of the code is borrowed from the package fitdistrplus
 
 genRandom <- function(distr, para, catgs=3, g=NULL, prob=NULL, print=FALSE, ...) {
-	
+
 	# Evaluate input arguments
 	if(class(para) != "list") stop("'para' must be a named list")
 	if (is.null(names(para))) stop("'para' must be a named list")
 	if ((missing(distr) & !missing(para)) || (missing(distr) & !missing(para))) stop("'distr' and 'para' must defined")
 	if (missing(catgs)) stop("'catgs', number of categories must be entered")
 	if (!is.null(g)) if((class(g) %in% c("factor","integer")==FALSE)) stop("Grouping variable 'g' must be numeric")
-	
+
 	# Random generation from the distribution specified in 'distr'
 	# & Check that the specified function exists.
 	rdistname <- paste("r",distr,sep="")
-	
+
 	if (distr != "trunc") {
 		if (!exists(rdistname, mode = "function")) stop(paste("The ", rdistname, " function must be defined"))
 		# Check that the input parameters in the list 'para' matches the internal arguments of the function specified.
@@ -318,34 +318,34 @@ genRandom <- function(distr, para, catgs=3, g=NULL, prob=NULL, print=FALSE, ...)
 		m <- match(nm, args)
 		if (any(is.na(m))) stop(paste("'para' specifies names which are not arguments to ", rdistname))
 	}
-	
+
 	# If vector with probabilities is supplied, check that the number of categories matches length of prob. vector
 	if (!missing(prob)) {
 		if (length(prob) != catgs) stop("Length of 'prob' vector must equal number of categories")
 		}
-	
+
 	# Create grouping variable, if a grouping variable is not supplied by the user:
 	if (is.null(g)) {
 		g <- sample(1:catgs, para[["n"]], replace=TRUE, prob=prob)
 		}
-	
-	
+
+
 	# For truncated distributions
-	if (distr == "trunc" | distr == "t3tr") {	
-		
+	if (distr == "trunc" | distr == "t3tr") {
+
 		# Add code for case when spec is missing in rt3tr
 		#if (distr == "t3tr") ... insert(para, 2, c(spec="t"))
-		
+
 		para.names <- names(para)
 		para.temp <- lapply(3:length(para), function(i) para[[i]][g])
 		para.temp <- insert(para.temp, ats=1, values=c(para$n), useNames=FALSE)
 		para.temp <- insert(para.temp, ats=2, values=c(para$spec), useNames=FALSE)
 		names(para.temp) <- para.names
 		para <- para.temp
-		
+
 		x <- do.call(paste("r",distr,sep=""), para)
 	}
-	
+
 	# For non-truncated distributions
 	else if (distr != "trunc" | distr != "t3tr") {
 		para.names <- names(para)
@@ -354,7 +354,7 @@ genRandom <- function(distr, para, catgs=3, g=NULL, prob=NULL, print=FALSE, ...)
 		x <- do.call(rdistname, para)
 		}
 	else stop("Not a valid distribution")
-	
+
 	# If print=TRUE, return a data frame with the grouping variable and not only the random variates
 	if (print==TRUE) x <- data.frame(g,x)
 	# Print
@@ -374,7 +374,7 @@ get.coef <- function(object, method="coef") {
 	if (method == "coef") str <- paste("as.numeric(fitted(object,'", pars.fitted, "')[1])", sep="")
 	if (method == "link") str <- rep(paste("object$", pars.fitted, ".link", sep=""))
 
-	pars <- sapply(1:npar, function(i) { 
+	pars <- sapply(1:npar, function(i) {
 		val <- eval(parse(text=str[i]))
 		ifelse(!is.null(val), val, NA)
 		})
@@ -413,12 +413,12 @@ norm2lnorm <- function(m,sd) {
 # breaks = number of bins for histogram.
 
 plot.Gamlss <- function(object, a=NULL, b=NULL, breaks=50) {
-	
+
 	x <- as.numeric(object$y)
-	
+
 	if (is.null(a)) a <- min(x)
 	if (is.null(b)) b <- max(x)
-	
+
 	n <- length(x)
 	distr <- object$family[1]
 	pars.names <- rownames(coef.Gamlss(object))
@@ -440,13 +440,13 @@ plot.Gamlss <- function(object, a=NULL, b=NULL, breaks=50) {
 		hist(x, col="steelblue", breaks=breaks, freq=FALSE, main=paste("f:",distr))
 		lines(density(x))
 		eval(parse(text=dstr))
-		
+
 		plot(qx, sort(x), xlab="Theoretical quantiles", ylab="Sample quantiles", main=paste("qq:",distr), cex=0.75)
 		abline(0,1,lty=2)
-		
+
 		hist(qx.resid, col="steelblue", breaks=breaks, freq=FALSE, xlab="Quantile residuals", main=paste("resid(",distr, ")", sep=""))
 		curve(dnorm(x), n=1001, col=2, lwd=2, add=T)
-		
+
 		qqnorm(qx.resid, xlab="Theoretical quantiles", ylab="Sample quantiles", main=paste("qq: resid(",distr, ")", sep=""), cex=0.75)
 		qqline(qx.resid, lty=2)
 	par(mfrow=c(1,1))
@@ -476,7 +476,6 @@ plot.tr.lnorm <- function(mu, sigma, a, b) {
 	yv.r <- dtrunc(xv, spec="lnorm", a=-Inf, b=b, meanlog=mu$r, sdlog=sigma$r)
 	ylims <- c(0, max(yv.nt,yv.rl,yv.r))
 
-	dev.new(width=12, height=6)
 	par(mfrow=c(1,2))
 	curve(dlnorm(x, meanlog=mu$ut, sdlog=sigma$ut), n=1001, col=1, add=F, from=0, to=b, ylim=ylims, ylab="Density", main="Log-normal distribution")
 	curve(dtrunc(x, "lnorm", a=a, b=b, meanlog=mu$lr, sdlog=sigma$lr), n=1001, col=2, lty=2, add=T)

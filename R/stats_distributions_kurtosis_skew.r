@@ -1,5 +1,6 @@
 # This function computes the estimate of kurtosis of the distribution
 # of x, following Box 6.2 in Sokal and Rohlf
+#' @export
 kurtosis <- function(x) {
 	m <- mean(x)
 	s <- sd(x)
@@ -11,6 +12,7 @@ kurtosis <- function(x) {
 
 # This function computes the estimate of skewness of the distribution
 # of x, following Box 6.2 in Sokal and Rohlf
+#' @export
 skew <- function(x) {
 	m <- mean(x)
 	s <- sd(x)

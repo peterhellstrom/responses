@@ -1,3 +1,4 @@
+#' @export
 ProjectSurvival <- function(N0, T, st) {
 	# N0 = initial number of individuals
 	# T = total number of transitions ("years"-1)

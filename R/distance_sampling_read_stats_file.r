@@ -1,6 +1,7 @@
 
 # Two functions that extracts data from the stats file
 
+#' @export
 split.line <- function(line) {
 # Be careful with this function! Parsing might go wrong.
 # It still gives some errors,
@@ -15,13 +16,13 @@ split.line <- function(line) {
   if(nchar(line) < 6) stop ("This isn't a stats file!")
   stratum <- as.integer(substr(line,1,6))
   if(is.na(stratum)) {
-    #this means that 
+    #this means that
     ok=FALSE
     samp <- NULL
     estimator <- NULL
     module <- NULL
     statistic <- NULL
-    value <- NULL  
+    value <- NULL
     cv <- NULL
     lcl <- NULL
     ucl <- NULL
@@ -44,8 +45,8 @@ split.line <- function(line) {
               estimator=estimator, module=module, statistic=statistic,
               value=value, cv=cv, lcl=lcl, ucl=ucl, degrees.freedom=degrees.freedom))
 }
-################################################################################
 
+#' @export
 read.stats.file <- function(stat.file.name) {
 #   Purpose: extracts results statistics from the MCDS stat file
 
@@ -59,7 +60,7 @@ read.stats.file <- function(stat.file.name) {
 #   Es          -   mean cluster size
 #   Es.se
 #   f0          -   pooled f0
-#   f0.se 
+#   f0.se
 #   n           -   number of detected animals
 #   n.se
 #   L           -   effort
@@ -87,7 +88,7 @@ read.stats.file <- function(stat.file.name) {
           Dhat.ind.cv[parsed.line$stratum] <- parsed.line$cv
           Dhat.ind.df[parsed.line$stratum] <- parsed.line$degrees.freedom}
        # Es
-       if(parsed.line$module==3 & parsed.line$statistic==4){# size bias adjusted cluster size 
+       if(parsed.line$module==3 & parsed.line$statistic==4){# size bias adjusted cluster size
           Es[parsed.line$stratum] <- parsed.line$value
           Es.cv[parsed.line$stratum] <- parsed.line$cv}
        # f0
@@ -103,11 +104,11 @@ read.stats.file <- function(stat.file.name) {
        # nL
        if(parsed.line$module==1 & parsed.line$statistic==4){# nL
           nL[parsed.line$stratum] <- parsed.line$value
-          nL.cv[parsed.line$stratum] <- parsed.line$cv}         
+          nL.cv[parsed.line$stratum] <- parsed.line$cv}
     }
   }
   return(list(
-          Dhat.ind=Dhat.ind, Dhat.ind.se=Dhat.ind*Dhat.ind.cv, Dhat.ind.df=Dhat.ind.df, 
+          Dhat.ind=Dhat.ind, Dhat.ind.se=Dhat.ind*Dhat.ind.cv, Dhat.ind.df=Dhat.ind.df,
           Es=Es, Es.se=Es*Es.cv, f0=f0, f0.se=f0*f0.cv,
           n=n, L=L, nL=nL, nL.se=nL*nL.cv
           ))

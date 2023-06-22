@@ -1,6 +1,7 @@
 # Observed data - Calculate survival
 # Input columns with number of individuals alive at each time step and grouping variable g
 # g can only contain two levels!
+#' @export
 surv.prob.2rand <- function(x, g, R=5000, plot=TRUE) {
 	if (length(levels(g)) > 2) stop("It's only possible to compare two survival functions")
 

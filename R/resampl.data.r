@@ -1,8 +1,9 @@
 # This function randomizes the input data and runs the analysis a specified number of times.
 # It uses the acc.curve() function
 
+#' @export
 resampl.data <- function(samples, genotypes, resamplings, replace=FALSE, Log=FALSE) {
-	
+
 	nS <- length(samples)
 	nUG <- length(unique(genotypes))
 	nR <- resamplings
@@ -14,7 +15,7 @@ resampl.data <- function(samples, genotypes, resamplings, replace=FALSE, Log=FAL
 	if (Log == TRUE) y <- log(y)
 	rownames(y) <- x
 	colnames(y) <- paste("Smp", 1:resamplings, sep="")
-	
+
 	yLong <- data.frame(
 				genotypes = c(y),
 				samples = rep(x, times=resamplings),

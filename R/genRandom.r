@@ -14,19 +14,20 @@
 
 # A lot of the code is borrowed from the package fitdistrplus
 
+#' @export
 genRandom <- function(distr, para, catgs=3, g=NULL, prob=NULL, print=FALSE, ...) {
-	
+
 	# Evaluate input arguments
 	if(class(para) != "list") stop("'para' must be a named list")
 	if (is.null(names(para))) stop("'para' must be a named list")
 	if ((missing(distr) & !missing(para)) || (missing(distr) & !missing(para))) stop("'distr' and 'para' must defined")
 	if (missing(catgs)) stop("'catgs', number of categories must be entered")
 	if (!is.null(g)) if((class(g) %in% c("factor","integer")==FALSE)) stop("Grouping variable 'g' must be numeric")
-	
+
 	# Random generation from the distribution specified in 'distr'
 	# & Check that the specified function exists.
 	rdistname <- paste("r",distr,sep="")
-	
+
 	if (distr != "trunc") {
 		if (!exists(rdistname, mode = "function")) stop(paste("The ", rdistname, " function must be defined"))
 		# Check that the input parameters in the list 'para' matches the internal arguments of the function specified.
@@ -38,34 +39,34 @@ genRandom <- function(distr, para, catgs=3, g=NULL, prob=NULL, print=FALSE, ...)
 		m <- match(nm, args)
 		if (any(is.na(m))) stop(paste("'para' specifies names which are not arguments to ", rdistname))
 	}
-	
+
 	# If vector with probabilities is supplied, check that the number of categories matches length of prob. vector
 	if (!missing(prob)) {
 		if (length(prob) != catgs) stop("Length of 'prob' vector must equal number of categories")
 		}
-	
+
 	# Create grouping variable, if a grouping variable is not supplied by the user:
 	if (is.null(g)) {
 		g <- sample(1:catgs, para[["n"]], replace=TRUE, prob=prob)
 		}
-	
-	
+
+
 	# For truncated distributions
-	if (distr == "trunc" | distr == "t3tr") {	
-		
+	if (distr == "trunc" | distr == "t3tr") {
+
 		# Add code for case when spec is missing in rt3tr
 		#if (distr == "t3tr") ... insert(para, 2, c(spec="t"))
-		
+
 		para.names <- names(para)
 		para.temp <- lapply(3:length(para), function(i) para[[i]][g])
 		para.temp <- insert(para.temp, ats=1, values=c(para$n), useNames=FALSE)
 		para.temp <- insert(para.temp, ats=2, values=c(para$spec), useNames=FALSE)
 		names(para.temp) <- para.names
 		para <- para.temp
-		
+
 		x <- do.call(paste("r",distr,sep=""), para)
 	}
-	
+
 	# For non-truncated distributions
 	else if (distr != "trunc" | distr != "t3tr") {
 		para.names <- names(para)
@@ -74,7 +75,7 @@ genRandom <- function(distr, para, catgs=3, g=NULL, prob=NULL, print=FALSE, ...)
 		x <- do.call(rdistname, para)
 		}
 	else stop("Not a valid distribution")
-	
+
 	# If print=TRUE, return a data frame with the grouping variable and not only the random variates
 	if (print==TRUE) x <- data.frame(g,x)
 	# Print

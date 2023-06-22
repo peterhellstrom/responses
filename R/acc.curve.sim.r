@@ -4,8 +4,9 @@
 # sim.summary <- function(run.data) ()
 # sim.plot <- function(sim.summary) ()
 
+#' @export
 acc.curve.sim <- function(genotypes, samples, resamplings) {
-	
+
 	# Inputs: genotypes (list with true population sizes), samples, resamplings
 
 	pop.vec <- sapply(1:length(genotypes), function(i) max(genotypes[[i]]) )
@@ -17,14 +18,14 @@ acc.curve.sim <- function(genotypes, samples, resamplings) {
 	g.full.output <- vector("list",length(genotypes))
 	avg.prop.found <- matrix(NA,ncol=length(genotypes),nrow=length(samples))
 	colnames(avg.prop.found) <- pop.vec
-	rownames(avg.prop.found) <- samples 
+	rownames(avg.prop.found) <- samples
 	full.prop.found <- matrix(NA,ncol=resamplings,nrow=length(samples))
-	g.full.prop.found <- vector("list",length(genotypes))   
+	g.full.prop.found <- vector("list",length(genotypes))
 
 	# Outer loop - loops over length of true pop size (input genotypes)
 	# Inner loop - sample size
 
-	for (runs in 1:length(genotypes)) { 
+	for (runs in 1:length(genotypes)) {
 
 		for (res in 1:length(samples)) {
 
@@ -33,7 +34,7 @@ acc.curve.sim <- function(genotypes, samples, resamplings) {
 		y <- matrix(NA,ncol=resamplings,nrow=samples[res])
 			for (j in 1:resamplings) y[,j]<- sample(genotypes[[runs]],samples[res],replace=TRUE)
 
-		z <- matrix(NA,ncol=resamplings,nrow=samples[res]) 
+		z <- matrix(NA,ncol=resamplings,nrow=samples[res])
 			for (k in 1:resamplings) z[,k] <- rep(1:length(unique(y[,k])),as.vector(table(y[,k])) )
 			z.mat <- matrix(rep(z,length(resamplings)),nrow=samples[res],ncol=resamplings,byrow=FALSE)
 			shuffle <- apply(z.mat,2,sample,replace=FALSE)
@@ -42,7 +43,7 @@ acc.curve.sim <- function(genotypes, samples, resamplings) {
 			for (l in 1:ncol(shuffle)) {
 				for (m in 1:nrow(shuffle)) data.set[m,l] <- length(unique(shuffle[1:m,l]) ) }
 
-		
+
 		# Extract proportion of found genotypes (averaged over resamplings)
 		a <- max(genotypes[[runs]])
 		b <- nrow(data.set)

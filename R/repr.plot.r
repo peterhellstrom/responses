@@ -1,9 +1,10 @@
 # Plot reproduction data (yearly averages), based on data summarized with the pop.samp function
+#' @export
 repr.plot <- function(x, y, g, error=NULL, n, xlims=range(x, na.rm=T), ylims=NULL,
 	xlab="Rodent density index", ylab="Population average", main="",
 	mar = c(5,5.5,1,2), cex=1.3, line=3.5,
-	points=TRUE, pch = as.numeric(g), dev.new=FALSE, legend=TRUE, ...) {
-	
+	points=TRUE, pch = as.numeric(g), legend=TRUE, ...) {
+
 	if (is.null(ylims)) {
 		if (is.null(error)) {
 			ylims <- c(0,ceiling(max(y, na.rm=T)))
@@ -11,12 +12,11 @@ repr.plot <- function(x, y, g, error=NULL, n, xlims=range(x, na.rm=T), ylims=NUL
 			ylims <- c(0,ceiling(max(y + error, na.rm=T)))
 		}
 	}
-	
-	if (dev.new == TRUE) dev.new(width=7, height=6)
+
 	op <- par(mar=mar)
 	plot(x, y, type="n", xlab=xlab, ylab="", main=main, font.lab=2, las=1, cex.axis=cex, cex.lab=cex, ylim=ylims, xlim=xlims, bty="l")
 	mtext(text=ylab, side=2, line=line, cex=cex, font=2)
-	
+
 	if (!is.null(error)) segments(x, y - error, x, y + error)
 	if (points) points(x, y, pch=pch, cex=cex, ...)
 	if (legend) repr.plot.legend()

@@ -2,6 +2,7 @@
 # This is one way to find start-values for estimation of functional response parameters.
 # NOTE: the nls2 package has more advanced grid search options for start values!
 
+#' @export
 fr.start.grid <- function(x, y, type=c("TypeII","TypeIIIa","TypeIIIb"), length.out=10, extra=50) {
 
 	type <- match.arg(type)
@@ -11,7 +12,7 @@ fr.start.grid <- function(x, y, type=c("TypeII","TypeIIIa","TypeIIIb"), length.o
 	# a (asymptote): search in interval mean(y) to max(y) + extra
 	# b (half-saturation constant): 0 to mean(x)
 	# theta: 0.5 to 5
-	
+
 	if (type == "TypeII") {
 		grid <- expand.grid(a = seq(mean(y), max(y) + extra, length.out=length.out), b = seq(0, mean(x), length.out=length.out))
 		ss <- function(p) sum((y - TypeII(x, p[1], p[2]))^2)
@@ -32,5 +33,5 @@ fr.start.grid <- function(x, y, type=c("TypeII","TypeIIIa","TypeIIIb"), length.o
 		fm <- nls(y ~ TypeIIIb(x, a, b, theta), start = startval)
 	} else stop("Model not included!")
 
-	dat <- list('start'=startval, 'nls'=fm, 'nlsSum'=summary(fm)) 
+	dat <- list('start'=startval, 'nls'=fm, 'nlsSum'=summary(fm))
 }

@@ -8,7 +8,7 @@ x <- rnorm(100,0,2)
 
 # Built-in function ecdf(x)
 ecdf.x <- ecdf(x)
-dev.new(); plot(ecdf.x)
+plot(ecdf.x)
 
 # Custom function ecdf2
 test1 <- ecdf2(x)

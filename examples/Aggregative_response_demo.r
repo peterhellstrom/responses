@@ -30,7 +30,6 @@ y2 <- abs(rnorm(length(x),(0.6*a*x2)/(3*b+x2),0.4))
 #gr(y1,method="r",plot=TRUE)
 #gr(y2,method="r",plot=TRUE)
 
-dev.new(width=10, height=5)
 par(mfrow=c(1,2))
 plot(x1, y1, xlab="Prey", ylab="Predator", xlim=c(0, max(c(x1,x2))), ylim=c(0,max(c(y1,y2))), pch=1)
 points(x2,y2,pch=16)

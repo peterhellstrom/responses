@@ -6,6 +6,7 @@
 # nls & gnls return the actual number of observations
 # gls return the number of observations - the number of model paramters (not including variance(s))!
 
+#' @export
 aicc <- function(object, nobs=NULL) {
 	# Get the number of datapoints and estimated parameters for different object classes
 	# object.class <- class(object)[1]
@@ -27,10 +28,11 @@ aicc <- function(object, nobs=NULL) {
 }
 
 # Extract AICc info and calculate statistics for many data sets
+#' @export
 aicc.n <- function(object, sort=TRUE, round=FALSE, nobs=NULL, digits=5) {
 	# Input is a list with objects (i.e. fitted models)
 	n <- length(object)
-	
+
 	if (!is.null(nobs)) {
 		tab <- data.frame(t(sapply(object,aicc,nobs)))
 		tab$n <- nobs
@@ -39,18 +41,27 @@ aicc.n <- function(object, sort=TRUE, round=FALSE, nobs=NULL, digits=5) {
 	}
 	rownames(tab) <- names(object)
 	index <- which(tab[,"AICc"] == min(tab[,"AICc"])) # Find model with smallest AICc
-	
+
 	deltai <- tab[,"AICc"] - min(tab[,"AICc"]) # AICc-delta values
 	rel.like <- exp(-deltai / 2) # Relative likelihood
 	wi <- rel.like / sum(rel.like) # Akaike weights
 	ER <- wi[index] / wi # Information ratio
 	ranking <- rank(deltai)
-	
+
 	# Create output (data frame)
-	out <- data.frame('logLik' = tab$logLik, 'K' = tab$k, 'n'=tab$n, 'AIC' = tab$AIC, 'AICc' = tab$AICc,
-		'delta' = deltai, 'weigths' = wi, 'ER' = ER, 'rank' = ranking)
+	out <- data.frame(
+	  'logLik' = tab$logLik,
+	  'K' = tab$k,
+	  'n'=tab$n,
+	  'AIC' = tab$AIC,
+	  'AICc' = tab$AICc,
+		'delta' = deltai,
+		'weigths' = wi,
+		'ER' = ER,
+		'rank' = ranking)
+
 	rownames(out) <- names(object)
-	
+
 	if (sort) out <- out[order(out[,"rank"]),]
 	if (round) {
 		round(out,digits)

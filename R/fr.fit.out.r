@@ -1,8 +1,8 @@
-# After the simulation: 
+# After the simulation:
 # Alternative power-analysis, check the number of times each model was selected
 # as "best", using AICc as criterion:
 # data is an object fitted with fr.fit or fr.fit.n
-
+#' @export
 fr.fit.out <- function (data){
 	# A function that finds the position of the maximum value in a vector
 	max.AICc <- function(x) which.max(x)

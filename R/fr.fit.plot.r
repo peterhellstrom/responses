@@ -1,38 +1,38 @@
 # Add a chosen type of functional response to an existing plot:
 # (works only for objects fitted with nls, predict is not available for mle2.)
 # Object = stored object, type = functional response type
-
+#' @export
 plot.fResponse <- function(object, type=c("Type0","TypeI","TypeII","TypeIIIa","TypeIIIb","all"),
-	main=NULL, xlab=NULL, ylab=NULL, lcols=c(1,1,2,3,4), ltys=c(3,1,2,3,4), lwd=2, dev.new=FALSE, ...) {
-	
+	main=NULL, xlab=NULL, ylab=NULL, lcols=c(1,1,2,3,4), ltys=c(3,1,2,3,4), lwd=2, ...) {
+
 	if (length(lcols) < 5) lcols <- rep(lcols[1],5)
 	if (length(ltys) < 5) ltys <- rep(ltys[1],5)
 	coefs <- object$coefs
-	
+
 	if (missing(type)) {
 		type <- "all"
 	} else {
 		type <- match.arg(type)
 	}
-	
+
 	if (missing(main)) {
 		strMain <- "Functional response"
 	} else {
 		strMain <- main
 	}
-	
+
 	if (missing(xlab)) {
 		strxlab <- "Prey density"
 	} else {
 		strxlab <- xlab
 	}
-	
+
 	if (missing(ylab)) {
 		strylab <- "Consumption rate"
 	} else {
 		strylab <- ylab
 	}
-	
+
 	plot(object$x, object$y,
 		bty="l", font.lab=2,
 		xlab=strxlab, ylab=strylab, main=strMain,...)

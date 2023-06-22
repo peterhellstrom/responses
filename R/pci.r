@@ -1,6 +1,7 @@
 # Function that obtains likelihood-profiles and confidence intervals for nls- or mle2-objects
+#' @export
 pci <- function(object, plot=FALSE, output=c("simple","full")) {
-	
+
 	if (class(object) == "lm") stop("object class lm is not implemented")
 	else if (class(object) == "glm") stop("object class glm is not supported")
 
@@ -8,7 +9,7 @@ pci <- function(object, plot=FALSE, output=c("simple","full")) {
 	p <- object
 	if (plot) plot(profile(object))
 	output <- match.arg(output)
-	
+
 	if (output == "simple") {
 		if (class(object)=="mle2") {
 			out <- data.frame(
@@ -42,7 +43,7 @@ pci <- function(object, plot=FALSE, output=c("simple","full")) {
 			)
 		}
 	}
-	
+
 	out
 }
 

@@ -1,13 +1,14 @@
 # Revision of older functions (surv.prob.xxx) for Flint et al's Kaplan-Meier type estimator
 # Staggered entry and censoring
 
+#' @export
 flint.km.nc <- function(x) {
 	# No censoring and no missing data
 	# Add warning messages!
 	z <- ncol(x)
 	M <- nrow(x)
 	names.list <- list('Brood' = rownames(x), 'Time' = paste(colnames(x)[1:z-1], colnames(x)[2:z], sep="-"))
-	
+
 	# Point estimation
 	S <- as.matrix(x[,-1] / x[,-z], ncol=z-1)
 	dimnames(S) <- names.list
@@ -19,11 +20,12 @@ flint.km.nc <- function(x) {
 	#n.bar <- colMeans(x)[-z]
 	#SE.t <- sqrt(colSums(x[,-z]^2 * t((t(S)-S.t)^2)) / (M * n.bar^2 * (M - 1)))
 	#SE.t <- sqrt(colSums(x[,-z]^2 * sweep(S,2,S.t,"-")^2) / (M * n.bar^2 * (M - 1)))
-	
+
 	out <- t(data.frame(S.t, S.f))
 	out
 }
 
+#' @export
 flint.km.nc.boot <- function(x, nboot=2000, ci.type="perc") {
 	tmp <- boot(data=x, statistic=function(x,i) flint.km.nc(x[i,]), R=nboot, stype="i")
 	dims <- dim(tmp$t0)
@@ -36,7 +38,7 @@ flint.km.nc.boot <- function(x, nboot=2000, ci.type="perc") {
 	ci.array <- array(dim=c(2,ncol(x)-1,2))
 	ci.array[,,1] <- ci[,grep(colnames(ci),pattern="S.t")]
 	ci.array[,,2] <- ci[,grep(colnames(ci),pattern="S.f")]
-	
+
 	dimnames(ci.array) <- list(c("CI.L","CI.U"), dimnames(tmp$t0)[[2]], dimnames(tmp$t0)[[1]])
 	list('x.bar' = x.bar, 'sd.bar' = sd.bar, 'ci' = ci.array)
 }
@@ -49,6 +51,7 @@ flint.km <- function(x, nboot=2000, ci.type="perc") {
 	out
 }
 
+#' @export
 plot.flint <- function(object) {
 	# Plotting of SE should be added (dotted or hashed lines)
 	# object is an object fitted with surv.prob()
@@ -62,9 +65,8 @@ plot.flint <- function(object) {
 	lx.val <- lx.val[-1]
 
 	ly.val <- rep(y.val,each=2)
-	ly.val <- ly.val[-length(ly.val)] 
+	ly.val <- ly.val[-length(ly.val)]
 
-	dev.new(width=8, height=6)
 	plot(x=x.val, y=y.val, type="n", font.lab=2, las=1, xlim=c(0,max(x.val)), ylim=range(y.val), xlab="Time", ylab="Survival",
 		main = "Modifed Kaplan-Meier estimate")
 	points(x.val,y.val,pch=16,cex=1.4)

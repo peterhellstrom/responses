@@ -4,14 +4,12 @@
 
 ##################################################
 # Plot probability density function
-dev.new()
 plot(x=c(0,3), y=c(0,2), xlab="", ylab="", type="n")
 curve(dlnorm(x=x, meanlog=0, sdlog=1), col="blue", add=T)
 curve(dlnorm(x=x, meanlog=0, sdlog=1/2), col="green", add=T)
 curve(dlnorm(x=x, meanlog=0, sdlog=1/4), col="red", add=T)
 
 # Plot cumulative density function
-dev.new()
 plot(x=c(0,3), y=c(0,1), xlab="", ylab="", type="n")
 curve(plnorm(q=x, meanlog=0, sdlog=1), col="blue", add=T)
 curve(plnorm(q=x, meanlog=0, sdlog=1/2), col="green", add=T)
@@ -74,7 +72,6 @@ n <- 100000
 meanlog <- 1
 sdlog <- 1/2
 
-dev.new(width=12, height=6)
 par(mfrow=c(1,2))
 .x <- rnorm(n, mean=meanlog, sd=sdlog)
 range(.x)
@@ -87,7 +84,6 @@ par(mfrow=c(1,1))
 
 mean(.x); median(.x); sd(.x); var(.x)
 
-##################################################
 # Generate random deviates
 n <- 50000
 meanlog <- 1
@@ -110,7 +106,6 @@ sd(.x); sd(log(.x))
 # Create a histogram and draw the probability density function over the bars.
 # Then add the log-transformed values and the corresponding pdf.
 
-dev.new(width=12, height=6)
 par(mfrow=c(1,2))
 	hist(.x, breaks=30, col="lightgrey", freq=FALSE)
 	curve(dlnorm(x=x, meanlog=meanlog, sdlog=sdlog), col="blue", lwd=2, add=T)
@@ -137,7 +132,7 @@ x.sd.lnorm <- t(sapply(1:niter, function(i) {
 		c(sd(x1), sd(x2))
 		})
 	)
-		
+
 apply(x.mean.lnorm,2,mean)
 apply(x.mean.lnorm,2,sd)
 
@@ -152,7 +147,7 @@ par(mfrow=c(1,1))
 
 ##################################################
 # Estimate moments of a lognormal distribution
-# Requires 
+# Requires
 library(fitdistrplus)
 ##################################################
 

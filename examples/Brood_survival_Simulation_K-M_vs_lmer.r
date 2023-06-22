@@ -59,95 +59,95 @@ Brood <- Population:Brood
 # Start for-loop
 for (i in 1:n.sim) {
 
-cat("Wait... iteration number", i, "\n")
+  cat("Wait... iteration number", i, "\n")
 
-# Population 1
-c1 <- round(rnorm(n1,x1,sd1),0) # Assume that clutch size is normal.
-# Survival probabilities (p ij, i=population, j=stage [stage 1 = egg-hatch, stage 2 = hatch-fledge)
-h1 <- rbinom(c1,c1,p11) # Calculate number of hatchlings (binomial sampling)
-f1 <- rbinom(h1,h1,p12) # Calculate number of fledglings (binomial sampling)
-pop1 <- data.frame(c1,h1,f1) # Check that it looks OK
+  # Population 1
+  c1 <- round(rnorm(n1,x1,sd1),0) # Assume that clutch size is normal.
+  # Survival probabilities (p ij, i=population, j=stage [stage 1 = egg-hatch, stage 2 = hatch-fledge)
+  h1 <- rbinom(c1,c1,p11) # Calculate number of hatchlings (binomial sampling)
+  f1 <- rbinom(h1,h1,p12) # Calculate number of fledglings (binomial sampling)
+  pop1 <- data.frame(c1,h1,f1) # Check that it looks OK
 
-# Repeat the same procedure for population 2:
-c2 <- round(rnorm(n2,x2,sd2),0)
-h2 <- rbinom(c2,c2,p21)
-f2 <- rbinom(h2,h2,p22)
-pop2 <- data.frame(c2,h2,f2)
+  # Repeat the same procedure for population 2:
+  c2 <- round(rnorm(n2,x2,sd2),0)
+  h2 <- rbinom(c2,c2,p21)
+  f2 <- rbinom(h2,h2,p22)
+  pop2 <- data.frame(c2,h2,f2)
 
-# Next step, create data frame for analysis
-# Bind the data together
-sim.dat <- data.frame(ClutchSize=c(c1,c2),Hatchlings=c(h1,h2),Fledglings=c(f1,f2),Population,Brood)
+  # Next step, create data frame for analysis
+  # Bind the data together
+  sim.dat <- data.frame(ClutchSize=c(c1,c2),Hatchlings=c(h1,h2),Fledglings=c(f1,f2),Population,Brood)
 
-# Re-format the data (binomial input)
-z <- 3
-temp <- lapply(2:z, function(i) data.frame(
-	Alive = sim.dat[,i],
-	Dead = sim.dat[,i-1] - sim.dat[,i],
-	Brood = sim.dat$Brood,
-	Population = factor(i))
-)
+  # Re-format the data (binomial input)
+  z <- 3
+  temp <- lapply(2:z, function(i) data.frame(
+    Alive = sim.dat[,i],
+    Dead = sim.dat[,i-1] - sim.dat[,i],
+    Brood = sim.dat$Brood,
+    Population = factor(i))
+  )
 
-temp <- do.call("rbind", temp)
+  temp <- do.call("rbind", temp)
 
-# Reformat the data once again, a list that later is called by lmer
-inp <- list(
-	surv = cbind(Alive = temp$Alive, Dead = temp$Dead),
-	brood = factor(temp$Brood),
-	stage = factor(temp$Time),
-	year = factor(temp$Year)
-)
+  # Reformat the data once again, a list that later is called by lmer
+  inp <- list(
+    surv = cbind(Alive = temp$Alive, Dead = temp$Dead),
+    brood = factor(temp$Brood),
+    stage = factor(temp$Time),
+    year = factor(temp$Year)
+  )
 
-# Call lmer
-rep.bn.lmer <- glmer(surv ~ stage * year + (1|brood), family=binomial, data=inp)
-glmer(surv ~ stage + (1|year), family=binomial, data=inp)
+  # Call lmer
+  rep.bn.lmer <- glmer(surv ~ stage * year + (1|brood), family=binomial, data=inp)
+  glmer(surv ~ stage + (1|year), family=binomial, data=inp)
 
-coefs <- rep.bn.lmer@fixef
+  coefs <- rep.bn.lmer@fixef
 
-rep.bn.lmer2 <- glmer(surv ~ stage + year + (1|brood), family=binomial, data=inp)
-anova(rep.bn.lmer,rep.bn.lmer2) # Should really use REML=FALSE for fixed effects comparison!!!
+  rep.bn.lmer2 <- glmer(surv ~ stage + year + (1|brood), family=binomial, data=inp)
+  anova(rep.bn.lmer,rep.bn.lmer2) # Should really use REML=FALSE for fixed effects comparison!!!
 
-pval <- anova(rep.bn.lmer,rep.bn.lmer2)[2,7]
-ps[i] <- pval # send p-value to a vector, de-select this step if not running the for loop!
+  pval <- anova(rep.bn.lmer,rep.bn.lmer2)[2,7]
+  ps[i] <- pval # send p-value to a vector, de-select this step if not running the for loop!
 
 
-# Calculate means of nestlings per breeding stage ----
-means <- cbind(
-tapply(sim.dat$ClutchSize,sim.dat$Year,mean),
-tapply(sim.dat$Hatchlings,sim.dat$Year,mean),
-tapply(sim.dat$Fledglings,sim.dat$Year,mean)
-)
+  # Calculate means of nestlings per breeding stage ----
+  means <- cbind(
+    tapply(sim.dat$ClutchSize,sim.dat$Year,mean),
+    tapply(sim.dat$Hatchlings,sim.dat$Year,mean),
+    tapply(sim.dat$Fledglings,sim.dat$Year,mean)
+  )
 
-#t(
-#tapply(temp$Alive,list(temp$Time,temp$Year),sum)/
-#tapply(temp$Alive+temp$Dead,list(temp$Time,temp$Year),sum))
+  #t(
+  #tapply(temp$Alive,list(temp$Time,temp$Year),sum)/
+  #tapply(temp$Alive+temp$Dead,list(temp$Time,temp$Year),sum))
 
-# Output comparing simulated values, calculated from means, estimated with lmer and estimated with KM.
-out <-
-data.frame(
-simulated = c(p11,p12,p21,p22), # print simulated p's
+  # Output comparing simulated values, calculated from means, estimated with lmer and estimated with KM.
+  out <-
+    data.frame(
+      simulated = c(p11,p12,p21,p22), # print simulated p's
 
-from.means = c(
-sapply(2:3, function(i) means[1,i]/means[1,i-1]),
-sapply(2:3, function(i) means[2,i]/means[2,i-1])
-), # Calculate survival p's from means
+      from.means = c(
+        sapply(2:3, function(i) means[1,i]/means[1,i-1]),
+        sapply(2:3, function(i) means[2,i]/means[2,i-1])
+      ), # Calculate survival p's from means
 
-est.lmer = c(
-logIt(as.numeric(coefs[1])),
-logIt(as.numeric(coefs[1] + coefs[2])),
-logIt(as.numeric(coefs[1] + coefs[3])),
-logIt(as.numeric((coefs[1] + coefs[2] + coefs[3] + coefs[4])))
-), # from lmer
+      est.lmer = c(
+        logIt(as.numeric(coefs[1])),
+        logIt(as.numeric(coefs[1] + coefs[2])),
+        logIt(as.numeric(coefs[1] + coefs[3])),
+        logIt(as.numeric((coefs[1] + coefs[2] + coefs[3] + coefs[4])))
+      ), # from lmer
 
-est.KM = c(
-surv.prob(pop1)$S.t,
-surv.prob(pop2)$S.t)
-) # Compare with modified Kaplan-Meier
+      est.KM = c(
+        surv.prob(pop1)$S.t,
+        surv.prob(pop2)$S.t)
+    ) # Compare with modified Kaplan-Meier
 
-# Send output to "Big" matrices:
-out.h1[i,] <- as.numeric(out[1,])
-out.f1[i,] <- as.numeric(out[2,])
-out.h2[i,] <- as.numeric(out[3,])
-out.f2[i,] <- as.numeric(out[4,])
+  # Send output to "Big" matrices:
+  out.h1[i,] <- as.numeric(out[1,])
+  out.f1[i,] <- as.numeric(out[2,])
+  out.h2[i,] <- as.numeric(out[3,])
+  out.f2[i,] <- as.numeric(out[4,])
 
 }
 

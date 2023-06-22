@@ -1,17 +1,14 @@
-##################################################
-# EXPONENTIAL DISTRIBUTION
-##################################################
 
-##################################################
+# EXPONENTIAL DISTRIBUTION
+
 # Plot probability density function
-dev.new()
+
 plot(x=c(0,3), y=c(0,1), xlab="", ylab="", type="n")
 curve(dexp(x=x, rate=1), col="blue", add=T)
 curve(dexp(x=x, rate=1/2), col="green", add=T)
 curve(dexp(x=x, rate=1/4), col="red", add=T)
 
 # Plot cumulative density function
-dev.new()
 plot(x=c(0,3), y=c(0,1), xlab="", ylab="", type="n")
 curve(pexp(q=x, rate=1), col="blue", add=T)
 curve(pexp(q=x, rate=1/2), col="green", add=T)
@@ -33,7 +30,6 @@ hist(.x, breaks=30, col="lightgrey", freq=FALSE, main="Sample from exponential d
 
 mean(.x); 1/lambda
 
-##################################################
 # Generate random deviates
 n <- 50000
 lambda <- 1/4
@@ -42,15 +38,13 @@ lambda <- 1/4
 range(.x)
 
 # Create a histogram and draw the probability density function over the bars.
-dev.new()
 hist(.x, breaks=30, col="lightgrey", freq=FALSE, main="Sample from exponential distribution")
 curve(dexp(x=x, rate=lambda), col="blue", lwd=2, add=T)
 
-##################################################
+
 # Estimate moments of a sample from the exponential distribution
-# Requires 
+# Requires
 library(fitdistrplus)
-##################################################
 
 # Create random sample from lognormal distribution
 n <- 10000
@@ -80,5 +74,3 @@ b1 <- bootdist(f1.exp, niter=100)
 summary(b1)
 
 plot(b1)
-
-##################################################

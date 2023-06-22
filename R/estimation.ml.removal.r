@@ -6,6 +6,7 @@
 # Note that interval estimation is not included in this function!!!
 # Input: vector of raw captures
 
+#' @export
 ml.rm <- function(captures) {
 
 	rs <- c(0,captures)[-length(c(0,captures))]
@@ -25,13 +26,13 @@ ml.rm <- function(captures) {
 		llk <- -sum(temp1 + temp2 + temp3)
 		return(llk)
 	}
-            
+
 	transform.xtoNtheta <- function(x) {
 		N <- exp(x[1]) + nall
 		theta <- exp(x[2])/(1 + exp(x[2]))
 		return(c(N, theta))
 	}
-            
+
 	transform.Nthetatox <- function(x) {
 		x <- c(log(x[1] - nall), log(x[2]/(1 - x[2])))
 		return(x)

@@ -2,11 +2,12 @@
 # Type IIIa & Type IIIb are not stable at all...
 
 # Type II
+#' @export
 SStypeII <- deriv(~ (a*x) / (b + x), c("a","b"), function(x,a,b) {})
 attr(SStypeII,"pnames") <- c("a","b","sigma")
 attr(SStypeII,"class") <- "selfStart"
-attr(SStypeII,"initial") <- 
-function (mCall, data, LHS) 
+attr(SStypeII,"initial") <-
+function (mCall, data, LHS)
 {
 	# data = data frame with x and y data
 	# LHS = left hand side = response variable = y
@@ -30,11 +31,12 @@ function (mCall, data, LHS)
     value
 }
 
+#' @export
 SStypeII.nls <- deriv(~ (a*x) / (b + x), c("a","b"), function(x,a,b) {})
 attr(SStypeII.nls,"pnames") <- c("a","b","sigma")
 attr(SStypeII.nls,"class") <- "selfStart"
-attr(SStypeII.nls,"initial") <- 
-function (mCall, data, LHS) 
+attr(SStypeII.nls,"initial") <-
+function (mCall, data, LHS)
 {
 	# data = data frame with x and y data
 	# LHS = left hand side = response variable = y
@@ -57,11 +59,12 @@ function (mCall, data, LHS)
 }
 
 # Type IIIa
+#' @export
 SStypeIIIa <- deriv(~ (a*x^2) / (b^2 + x^2), c("a","b"), function(x,a,b) {})
 attr(SStypeIIIa,"pnames") <- c("a","b","sigma")
 attr(SStypeIIIa,"class") <- "selfStart"
-attr(SStypeIIIa,"initial") <- 
-function (mCall, data, LHS) 
+attr(SStypeIIIa,"initial") <-
+function (mCall, data, LHS)
 {
 	# data = data frame with x and y data
 	# LHS = left hand side = response variable = y
@@ -84,11 +87,12 @@ function (mCall, data, LHS)
     value
 }
 
+#' @export
 SStypeIIIa.nls <- deriv(~ (a*x^2) / (b^2 + x^2), c("a","b"), function(x,a,b) {})
 attr(SStypeIIIa.nls,"pnames") <- c("a","b")
 attr(SStypeIIIa.nls,"class") <- "selfStart"
-attr(SStypeIIIa.nls,"initial") <- 
-function (mCall, data, LHS) 
+attr(SStypeIIIa.nls,"initial") <-
+function (mCall, data, LHS)
 {
 	# data = data frame with x and y data
 	# LHS = left hand side = response variable = y
@@ -110,11 +114,12 @@ function (mCall, data, LHS)
 }
 
 # Type IIIb
+#' @export
 SStypeIIIb <- deriv(~ (a*x^theta) / (b^theta + x^theta), c("a","b","theta"), function(x,a,b,theta) {})
 attr(SStypeIIIb,"pnames") <- c("a","b","theta","sigma")
 attr(SStypeIIIb,"class") <- "selfStart"
-attr(SStypeIIIb,"initial") <- 
-function (mCall, data, LHS) 
+attr(SStypeIIIb,"initial") <-
+function (mCall, data, LHS)
 {
 	# data = data frame with x and y data
 	# LHS = left hand side = response variable = y
@@ -141,11 +146,12 @@ function (mCall, data, LHS)
     value
 }
 
+#' @export
 SStypeIIIb.nls <- deriv(~ (a*x^theta) / (b^theta + x^theta), c("a","b","theta"), function(x,a,b,theta) {})
 attr(SStypeIIIb.nls,"pnames") <- c("a","b","theta")
 attr(SStypeIIIb.nls,"class") <- "selfStart"
-attr(SStypeIIIb.nls,"initial") <- 
-function (mCall, data, LHS) 
+attr(SStypeIIIb.nls,"initial") <-
+function (mCall, data, LHS)
 {
 	# data = data frame with x and y data
 	# LHS = left hand side = response variable = y
@@ -176,7 +182,7 @@ function (mCall, data, LHS)
 	#z <- xy[["y"]]
 	#if (min(z) <= 0) z <- abs(z)
 	#xy[["z"]] <- log(z/(a.hat - z))
-	
+
 	#m0 <- lm(z ~ log(x), data=xy)
 	#theta.hat <- as.numeric(coef(m0)[2]) # slope
 	#b.hat <- as.numeric(exp(-coef(m0)[1] / theta.hat))
@@ -186,8 +192,9 @@ function (mCall, data, LHS)
 
 # Must also include estimate of sigma for mle2-functions
 # getInitial(y ~ SStypeIIIb(x,a,b,theta), data=xy.list) part is wrong, this does not work...
+#' @export
 getStart.mm <- function(x, y, method=c("mle","nls")) {
-	
+
 	method = match.arg(method)
 	xy.list <- list(x=x,y=y)
 
@@ -195,7 +202,7 @@ getStart.mm <- function(x, y, method=c("mle","nls")) {
 		ini.0 <- c('a'=mean(y), 'sigma'=sd(y))
 		m.I.start <- lm(y~x-1)
 		ini.I <- c('a'=as.vector(coef(m.I.start)), 'sigma'=as.numeric(sqrt(deviance(m.I.start)/df.residual(m.I.start))))
-	
+
 		out <- list(
 			'eq' = 'M-M',
 			'x' = x,
@@ -210,7 +217,7 @@ getStart.mm <- function(x, y, method=c("mle","nls")) {
 		ini.0 <- c('a'=mean(y))
 		m.I.start <- lm(y~x-1)
 		ini.I <- c('a'=as.vector(coef(m.I.start)))
-	
+
 		out <- list(
 			'eq' = 'M-M',
 			'x' = x,
@@ -221,27 +228,28 @@ getStart.mm <- function(x, y, method=c("mle","nls")) {
 			'ini.IIIa' = getInitial(y ~ SStypeIIIa.nls(x,a,b), data=xy.list),
 			'ini.IIIb' = getInitial(y ~ SStypeIIIb.nls(x,a,b,theta), data=xy.list)
 		)
-	
+
 	}
-	
+
 	class(out) <- "getStart"
 	out
 }
 
+#' @export
 getStart.mm2 <- function(x, y, method=c("mle","nls"), theta=2) {
 	# Use the estimates from type IIIa for type IIIb as well!
-	
+
 	method <- match.arg(method)
 	xy.list <- list(x=x,y=y)
 
 	if (method == "mle") {
-	
+
 		ini.0 <- c('a'=mean(y), 'sigma'=sd(y))
 		m.I.start <- lm(y~x-1)
 		ini.I <- c('a'=as.vector(coef(m.I.start)), 'sigma'=as.numeric(sqrt(deviance(m.I.start)/df.residual(m.I.start))))
 		ini.IIIb <- c(getInitial(y ~ SStypeIIIa(x,a,b), data=xy.list), 'theta'=theta)
 		ini.IIIb <- ini.IIIb[c(1,2,4,3)]
-	
+
 		out <- list(
 			'eq' = 'M-M',
 			'x' = x,
@@ -258,7 +266,7 @@ getStart.mm2 <- function(x, y, method=c("mle","nls"), theta=2) {
 		ini.I <- c('a'=as.vector(coef(m.I.start)))
 		ini.IIIb <- c(getInitial(y ~ SStypeIIIa.nls(x,a,b), data=xy.list), 'theta'=theta)
 		ini.IIIb <- ini.IIIb[c(1,2,4,3)]
-	
+
 		out <- list(
 			'eq' = 'M-M',
 			'x' = x,
@@ -269,9 +277,9 @@ getStart.mm2 <- function(x, y, method=c("mle","nls"), theta=2) {
 			'ini.IIIa' = getInitial(y ~ SStypeIIIa.nls(x,a,b), data=xy.list),
 			'ini.IIIb' = ini.IIIb
 		)
-	
+
 	}
-	
+
 	class(out) <- "getStart"
 	out
 }
@@ -279,10 +287,11 @@ getStart.mm2 <- function(x, y, method=c("mle","nls"), theta=2) {
 # Add function that calculate Holling-type start parameters from Michaelis-Menten parameterization:
 # Check how these values really should be calculated
 # Something is wrong - I can't use these estimates even if I simulate from a well behaved disk-equation...
+#' @export
 getStart.h <- function(x, y, method=c("mle","nls"), theta=2) {
 	method <- match.arg(method)
 	xy.list = list(x,y)
-	
+
 	if (method == "mle") {
 		mm <- getStart.mm2(x, y, theta, method="mle")
 		ini.II = with(as.list(mm$ini.II), c('a'=a/b, 'h'=1/a, 'sigma'=sigma))
@@ -295,26 +304,27 @@ getStart.h <- function(x, y, method=c("mle","nls"), theta=2) {
 		ini.IIIa <- with(as.list(mm$ini.IIIa), c('a'=a/b^2, 'h'=1/a))
 		ini.IIIb <- with(as.list(mm$ini.IIIb), c('a'=2 * (a/b^theta), 'h'=1/a, 'theta'=theta))
 		out <- list('eq'='Holling', 'x' = x,'y' = y, 'ini.0' = mm$ini.0, 'ini.I' = mm$ini.I, 'ini.II'=ini.II, 'ini.IIIa'=ini.IIIa, 'ini.IIIb'=ini.IIIb)
-	
+
 	}
 	class(out) <- "getStart"
 	out
 }
 
+#' @export
 getStart.method <- function(x, y, plot=TRUE) {
 
 	m1 <- lm(x/y ~ x)
 	m2 <- lm(1/y ~ I(1/x))
-	
+
 	bolker <- c('att'=as.numeric((coef(m1)[1])^-1), 'h'=as.numeric(coef(m1)[2]))
 	bolker.mm <- convHollMM(att=as.numeric(bolker["att"]), h=as.numeric(bolker["h"]))
-	
+
 	out <- list(
 		'bolker' = bolker,
 		'bolker.mm' = bolker.mm,
 		'lineweaver-burk' = c('a' = as.numeric(1/abs(coef(m2)[1])), 'b'= as.numeric(abs(coef(m2)[2]/coef(m2)[1])))
 	)
-	
+
 	if (plot) {
 		par(mfrow=c(2,2))
 			plot(x,x/y)
@@ -325,19 +335,20 @@ getStart.method <- function(x, y, plot=TRUE) {
 				abline(m2,col=2)
 			par(mfrow=c(1,1))
 	}
-	
+
 	out
 }
 
 
 # Function that plots initial estimates for a given (single) dataset
+#' @export
 plot.getStart <- function(object, ...) {
-	
+
 	eq <- object$eq
 	x <- object$x
 	y <- object$y
 	plot(x,y,...)
-	
+
 	if (eq=="M-M") {
 		with(as.list(object$ini.II), curve(TypeII(x, a=a, b=b), add=TRUE, col=2,lty=2))
 		with(as.list(object$ini.IIIa), curve(TypeIIIa(x, a=a, b=b), add=TRUE, col=3, lty=3))

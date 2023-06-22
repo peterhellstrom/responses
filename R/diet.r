@@ -1,4 +1,3 @@
-################################################################################
 # Calculate number of killed prey (NP):
 # n = number of individuals in each predator class (adults, juveniles etc.)
 # Example for a raptor pair: c(adults, brood size), e.g. c(2,4)
@@ -8,6 +7,7 @@
 # T = Time, duration of study in days (defaults to 1)
 # This function can use single numbers as inputs, or vectors (all vector must be of the same length)
 
+#' @export
 NP <- function(n, der, pp, mmp, T=1) {
 	inp <- list(der, pp, n)
 	crit <- unique(sapply(inp, length))
@@ -15,14 +15,14 @@ NP <- function(n, der, pp, mmp, T=1) {
 	T * (sum(n * der * pp) /  mmp)
 }
 
-################################################################################
 # Daily energy requirement
 # cast.rate = daily casting rate of pellets
 # corr.factor = single value or vector with correction factor (corrects for digested prey, usually based on feeding experiments in captivity)
-# mmp = mean mass in grams of prey tyep/species i 
+# mmp = mean mass in grams of prey tyep/species i
 # n = number of prey items of type/species i
 # N = total number of pellets analyzed
 # output = c("sum","ind"). If "sum" only the sum of all prey types is returned. If "ind", the contribution of each prey type i will be returned
+#' @export
 der <- function(cast.rate=1.1, corr.factor=1, mmp, n, N, output=c("sum", "ind")) {
 	output <- match.arg(output)
 	if (output == "sum") {
@@ -37,7 +37,6 @@ der <- function(cast.rate=1.1, corr.factor=1, mmp, n, N, output=c("sum", "ind"))
 # Use different correction factors: input a vector of same length as n
 # der(mmp=c(31.50, 48.60, 31.30), corr.factor=c(1.05,1.52,1.7), n=c(10,15,14), N=20)
 
-################################################################################
 # Predicted daily food requirements, from scaling theory
 # After Nagy 1987 + Bozinovic & Medel 1988
 # m = body weight (mass) of animal (in grams)
@@ -45,6 +44,7 @@ der <- function(cast.rate=1.1, corr.factor=1, mmp, n, N, output=c("sum", "ind"))
 # cal = caloric content of 1 g prey
 
 # Default values: eff=0.769 (estimate for raptors), cal=6.65 (caloric content for 1 g of small mammal prey)
+#' @export
 der.pred <- function(m=1000, eff=0.769, cal=6.65) {
 	fmr <- 10.9 * m^0.64
 	fmr / (eff * cal)
@@ -52,8 +52,6 @@ der.pred <- function(m=1000, eff=0.769, cal=6.65) {
 
 # Example:
 # der.pred(m=800, eff=0.6)
-
-################################################################################
 
 # Heavier prey: fewer items are necessary to fulfil daily energy requirements.
 # For heavier prey, asymptote of functional response will always be lower, so the relevant null hypotheses
@@ -78,5 +76,3 @@ der.pred <- function(m=1000, eff=0.769, cal=6.65) {
  #NP(mmp=31.50, der=c(110,140), n=c(2,4), pp=c(0.5,0.8)) # Difference between prey classes = 17.71
 # NP(mmp=31.50, der=c(110,140), n=c(2,4), pp=c(0.8,0.5)) # Switch proportion order = 14.47619
 # Difference depends on der and n
-
-################################################################################

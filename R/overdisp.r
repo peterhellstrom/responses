@@ -1,6 +1,7 @@
 # Test for overdispersion (works with lme4 and glmmadmb)
 # http://glmm.wikidot.com/faq
 
+#' @export
 overdisp <- function(model) {
 	# number of variance parameters in an n-by-n variance-covariance matrix
 	vpars <- function(m) {
@@ -20,6 +21,7 @@ overdisp <- function(model) {
 }
 
 # From Zuur et al. 2013, p. 138 [A Beginner's Guide to GLM and GLMM with R]
+#' @export
 overdisp.zuur <- function(model, data) {
 	if (class(model) != "glmmadmb") {
 		E1 <- resid(model, type="pearson")
