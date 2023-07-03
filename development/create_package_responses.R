@@ -38,7 +38,7 @@ devtools::install()
 devtools::test()
 
 # Ignore ----
-use_build_ignore(c("data-raw", "development", "examples"))
+use_build_ignore(c("backup", "data-raw", "development", "examples"))
 
 ## Data sets ----
 usethis::use_data_raw()

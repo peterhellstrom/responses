@@ -1,18 +1,14 @@
-##################################################
-setwd("C:/WORK/ANALYSER/-= Statistical methods in R =-/Distributions")
-source("DistributionsFunctions.r")
-##################################################
+# Right-truncation with dtrunc ----
 
-# Right-truncation with dtrunc:
 # DO NOT FORGET to enter the a argument, with value a=-Inf.
 # Otherwise things get wrong...
 
-##################################################
+
 n <- 10000
 mu <- 0.5
 sigma <- 1
 
-x <- rlnorm(n,meanlog=mu,sdlog=sigma)
+x <- rlnorm(n, meanlog = mu, sdlog = sigma)
 plot(density(x))
 plot(density(log(x)))
 
@@ -25,8 +21,7 @@ curve(dLOGNO(x, mu=mu, sigma=sigma), col=4,add=T, n=1001)
 gen.trun(10, family="LOGNO", type="right")
 curve(dLOGNOtr(x, mu=mu, sigma=sigma), col=3, lty=2, add=T, n=1001, xlim=c(0,10))
 
-##################################################
-# What about normal?
+# What about normal? ----
 n <- 10000
 mu <- 7
 sigma <- 2

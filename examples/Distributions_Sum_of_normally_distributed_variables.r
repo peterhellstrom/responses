@@ -14,7 +14,7 @@ system.time({
 	xs <- rnorm(n=n*fac, mu, sigma)
 	x2 <- replicate(sample(xs,size=n,replace=TRUE), n=nrepl) })
 
-x1.m <- colMeans(x1)	
+x1.m <- colMeans(x1)
 x2.m <- colMeans(x2)
 
 # bias
@@ -42,7 +42,9 @@ nobj <- 20000
 nperobj <- 6
 
 # Approach 1, generate nobj * nperobj random variates
-erracc <- function(nobj, nperobj, mean, sd) replicate(sum(rnorm(n=nperobj, mean=mean, sd=sd)), n=nobj)
+erracc <- function(nobj, nperobj, mean, sd) {
+  replicate(sum(rnorm(n=nperobj, mean=mean, sd=sd)), n=nobj)
+}
 
 system.time(test1 <- erracc(nobj=nobj, nperobj=nperobj, mean=mu, sd=sigma))
 
@@ -57,11 +59,12 @@ sigma.sum <- sqrt(sum(rep(sigma^2,nperobj))) # expected sd of sum
 system.time(test2 <- rnorm(n=nobj, mu.sum, sigma.sum))
 
 xlims <- c(qnorm(0.0001, mu.sum, sigma.sum), qnorm(0.9999, mu.sum, sigma.sum))
-curve(dnorm(x, mu.sum, sigma.sum), col=2, xlim=xlims, lwd=2, main=expression(paste("Same ", mu, " & ", sigma))) # Expectation
+curve(dnorm(x, mu.sum, sigma.sum), col=2, xlim=xlims, lwd=2,
+      main=expression(paste("Same ", mu, " & ", sigma))) # Expectation
 lines(density(test1),col=3) # Simulation, method 1
 lines(density(test2), col=4) # Simulation, method 2 (shortcut)
-legend("topleft", c("Expectation","Simulation, Long","Simulation, Shortcut"), lty=c(1,1,1), lwd=c(2,1,1), col=c(2,3,4), bty="n", cex=0.8)
-
+legend("topleft", c("Expectation","Simulation, Long","Simulation, Shortcut"),
+       lty=c(1,1,1), lwd=c(2,1,1), col=c(2,3,4), bty="n", cex=0.8)
 
 # if means and sds differ, the same theorem applies:
 nperobj <- 3
@@ -77,8 +80,9 @@ test3 <- erracc(nobj=nobj, nperobj=nperobj, mean=mus, sd=sigmas)
 test4 <- rnorm(n=nobj, mu.sums, sigma.sums)
 
 xlims <- c(qnorm(0.0001, mu.sums, sigma.sums), qnorm(0.9999, mu.sums, sigma.sums))
-curve(dnorm(x, mu.sums, sigma.sums), col=2, xlim=xlims, lwd=2, main=expression(paste("Different ", mu, " & ", sigma))) # Expectation
+curve(dnorm(x, mu.sums, sigma.sums), col=2, xlim=xlims, lwd=2,
+      main=expression(paste("Different ", mu, " & ", sigma))) # Expectation
 lines(density(test3),col=3) # Simulation, method 1
 lines(density(test4), col=4) # Simulation, method 2 (shortcut)
-legend("topleft", c("Expectation","Simulation, Long","Simulation, Shortcut"), lty=c(1,1,1), lwd=c(2,1,1), col=c(2,3,4), bty="n", cex=0.8)
-
+legend("topleft", c("Expectation","Simulation, Long","Simulation, Shortcut"),
+       lty=c(1,1,1), lwd=c(2,1,1), col=c(2,3,4), bty="n", cex=0.8)
