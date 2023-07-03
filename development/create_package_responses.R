@@ -37,6 +37,12 @@ devtools::install()
 
 devtools::test()
 
+# Ignore ----
+use_build_ignore(c("data-raw", "development", "examples"))
+
+## Data sets ----
+usethis::use_data_raw()
+
 # Document data:
 # https://r-pkgs.org/data.html
 
