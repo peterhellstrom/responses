@@ -60,21 +60,3 @@ wms_layers_data
 tms_layers_data
 
 st_as_sf(storrutor, coords = c("easting", "northing"), crs = 3021)
-
-## Functions ----
-# How should functions be written - include source package in code?
-# Use native pipe or not?
-# Depends in DESCRIPTION file - loads all packages, can this be avoided?
-# Can Imports be used?
-tmp <- function(.x, ...) {
-  .x %>%
-    dplyr::select(...)
-}
-
-ekorutor %>% tmp(ruta_id)
-
-round_up(9.45)
-lm_basemaps()
-swe_tiles(tile_providers = tms_layers_data)
-index_to_sf(storrutor, easting, northing, 50000, 50000, 3021) %>%
-  mapview()
